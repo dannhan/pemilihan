@@ -25,7 +25,10 @@ export function Vote({
             <Button
               key={candidate.nama}
               variant="default"
-              onClick={() => setSelected(candidate.nama)}
+              onClick={() => {
+                setSelected(candidate.nama);
+                window.scrollTo({ top: 0 });
+              }}
             >
               {candidate.nama}
             </Button>

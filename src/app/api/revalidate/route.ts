@@ -1,5 +1,3 @@
-import { isValidSignature, SIGNATURE_HEADER_NAME } from "@sanity/webhook";
-import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { revalidateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
@@ -11,6 +9,7 @@ export async function POST(req: NextRequest) {
       _type: string;
       slug?: string | undefined;
     }>(req, process.env.SANITY_WEBHOOK_SECRET);
+
     console.log({ body, isValidSignature });
 
     if (!isValidSignature) {
