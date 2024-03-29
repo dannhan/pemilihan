@@ -11,7 +11,7 @@ export default async function Page() {
   const initial = await loadQuery<SanityDocument[]>(VOTES_QUERY);
 
   return (
-    <main className="mx-auto my-8 min-h-screen max-w-4xl px-4 text-center">
+    <main className="mx-auto my-8 min-h-screen max-w-screen-xl px-4 text-center">
       {initial.data.map((vote) => (
         <Link key={vote.daerah} href={`/voting/${vote.daerah.toLowerCase()}`}>
           <div className="my-4 cursor-pointer rounded-md border bg-card p-4 text-left shadow-md">

@@ -19,8 +19,8 @@ export function Vote({
   ) : (
     <>
       <h1 className="mt-4 text-center text-xl font-bold">{title}</h1>
-      {/* <section className="mt-4 flex flex-col items-center rounded border p-6 text-center shadow-md"> */}
-      <section className="mt-4 flex flex-col items-center rounded p-6 text-center">
+      <section className="mt-4 flex flex-col items-center rounded border p-6 text-center shadow-md">
+      {/* <section className="mt-4 flex flex-col items-center rounded p-6 text-center"> */}
         <p className="mb-4 text-lg">Klik tombol pilihan anda</p>
         <ul className="inline-flex w-fit items-stretch gap-4 [flex-flow:wrap]">
           {candidates.map((candidate) => (
