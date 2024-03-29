@@ -27,7 +27,10 @@ export default async function Page({ params }: { params: { id: string } }) {
         </Link>
       </Button>
 
-      <Vote candidates={initial.data?.kandidat || []} title={initial.data.title} />
+      <Vote
+        candidates={initial.data?.kandidat || []}
+        title={initial.data.title}
+      />
     </main>
   );
 }
