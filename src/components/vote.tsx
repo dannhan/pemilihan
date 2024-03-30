@@ -20,11 +20,14 @@ export function Vote({
     <>
       <h1 className="mt-4 text-center text-xl font-bold">{title}</h1>
       <section className="mt-4 flex flex-col items-center rounded border p-6 text-center shadow-md">
-      {/* <section className="mt-4 flex flex-col items-center rounded p-6 text-center"> */}
+        {/* <section className="mt-4 flex flex-col items-center rounded p-6 text-center"> */}
         <p className="mb-4 text-lg">Klik tombol pilihan anda</p>
         <ul className="inline-flex w-fit items-stretch gap-4 [flex-flow:wrap]">
           {candidates.map((candidate) => (
-            <li key={candidate.nama} className="h-[inherit] w-full min-[440px]:w-[calc(50%-12px)] min-[720px]:w-[calc(25%-12px)]">
+            <li
+              key={candidate.nama}
+              className="h-[inherit] w-full min-[440px]:w-[calc(50%-12px)] min-[720px]:w-[calc(25%-12px)]"
+            >
               <button
                 className="flex h-full w-full flex-col items-center rounded border-2"
                 onClick={() => {

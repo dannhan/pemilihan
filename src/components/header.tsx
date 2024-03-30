@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 
@@ -7,10 +9,12 @@ import { HeaderLink } from "./header-link";
 
 export function Header() {
   const links = [
-    { href: "/", label: "Features" },
-    { href: "/", label: "Pricing" },
-    { href: "/", label: "Blog" },
-    { href: "/", label: "Documentation" },
+    { href: "/", label: "Beranda" },
+    // { href: "/tentang-kami", label: "Tentang Kami" },
+    { href: "/buat-polling", label: "Buat Polling" },
+    // { href: "/", label: "Polling Terbaru" },
+    // { href: "/", label: "FAQ" },
+    // { href: "/", label: "Hubungi Kami" },
   ];
 
   return (
@@ -21,7 +25,7 @@ export function Header() {
             <Image width={32} height={32} src="/logo.png" alt="logo" />
           </Link>
 
-          <ul className="ml-8 flex flex-grow gap-4 font-semibold text-foreground/60">
+          <ul className="ml-8 flex flex-grow gap-4 font-semibold text-foreground/50">
             {links.map(({ href, label }) => (
               <li key={`${href}-${label}`}>
                 <HeaderLink href={href} label={label} />
