@@ -5,8 +5,6 @@ import { SanityDocument } from "next-sanity";
 import { loadQuery } from "@/sanity/lib/store";
 import { VOTES_QUERY } from "@/sanity/lib/queries";
 
-export const dynamic = "force-static";
-
 export default async function Page() {
   const initial = await loadQuery<SanityDocument[]>(VOTES_QUERY);
 

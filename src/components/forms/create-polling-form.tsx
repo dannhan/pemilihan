@@ -48,7 +48,7 @@ const defaultValues: Partial<FormValues> = {
   comment: false,
 };
 
-export function PollingForm() {
+export function CreatePollingForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues,

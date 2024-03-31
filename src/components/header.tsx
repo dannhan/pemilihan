@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { ModeToggle } from "./mode-toggle";
 import { HeaderLink } from "./header-link";
 
+import { getAuth } from "@/lib/auth";
+import HeaderAvatar from "./header-avatar";
+
 export async function Header() {
   const links = [
     { href: "/", label: "Beranda" },
@@ -14,6 +17,8 @@ export async function Header() {
     // { href: "/", label: "FAQ" },
     // { href: "/", label: "Hubungi Kami" },
   ];
+
+  const session = await getAuth();
 
   return (
     <header className="sticky top-0">
@@ -33,26 +38,31 @@ export async function Header() {
 
           <ModeToggle className="transition-transform" />
 
-          <Button size="sm" className="rounded-lg px-5" asChild>
-            <Link href="/login">
-              Login
-              <svg
-                className="ml-2 hidden h-3 w-3 xl:inline"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 10"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M1 5h12m0 0L9 1m4 4L9 9"
-                ></path>
-              </svg>
-            </Link>
-          </Button>
+          {/* todo */}
+          {session ? (
+            <HeaderAvatar session={session} />
+          ) : (
+            <Button size="sm" className="rounded-lg px-5" asChild>
+              <Link href="/login">
+                Login
+                <svg
+                  className="ml-2 h-3 w-3"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 14 10"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M1 5h12m0 0L9 1m4 4L9 9"
+                  ></path>
+                </svg>
+              </Link>
+            </Button>
+          )}
         </div>
       </nav>
     </header>

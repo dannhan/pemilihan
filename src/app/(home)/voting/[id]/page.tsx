@@ -9,8 +9,6 @@ import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Vote } from "@/components/vote";
 
-export const dynamic = "force-static";
-
 export default async function Page({ params }: { params: { id: string } }) {
   const capitalizeParams =
     params.id.charAt(0).toUpperCase() + params.id.slice(1);
