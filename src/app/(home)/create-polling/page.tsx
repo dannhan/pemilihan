@@ -1,5 +1,3 @@
-"use client";
-
 import { PollingForm } from "@/components/forms/polling-form";
 
 export default function Page() {
