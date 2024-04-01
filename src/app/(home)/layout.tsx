@@ -1,3 +1,4 @@
+import { getAuth } from "@/lib/auth";
 import { Header } from "@/components/header";
 
 export default async function Layout({
@@ -5,9 +6,11 @@ export default async function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getAuth();
+
   return (
     <>
-      <Header />
+      <Header session={session} />
       {children}
     </>
   );

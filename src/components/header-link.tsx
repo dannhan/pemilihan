@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,6 +17,7 @@ export function HeaderLink({ href, label }: Props) {
       href={href}
       className={cn(
         "transition-colors hover:text-foreground/80",
+        "block py-2 pl-3 pr-4 md:bg-transparent md:p-0",
         href === pathname && "text-foreground/90",
       )}
     >

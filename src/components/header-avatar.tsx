@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export default function HeaderAvatar({ session }: { session: Session }) {
+export function HeaderAvatar({ session }: { session: Session }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
