@@ -105,7 +105,7 @@ export function Header({ session }: { session: Session | null }) {
             <aside
               className={cn(
                 "fixed right-0 top-0 z-20 h-screen w-[21rem] max-w-[90%] translate-x-full overflow-y-auto border-l bg-background transition-transform duration-300",
-                "md:static md:order-1 md:flex md:h-auto md:w-auto md:flex-grow md:translate-x-0 md:justify-end  md:border-none",
+                "md:static md:order-1 md:flex md:h-auto md:w-auto md:flex-grow md:translate-x-0 md:justify-end  md:border-none md:bg-transparent",
                 isMenuOpen && "block translate-x-0",
               )}
             >
