@@ -1,16 +1,19 @@
 import Link from "next/link";
 
-import { SanityDocument } from "next-sanity";
-
-import { loadQuery } from "@/sanity/lib/store";
-import { VOTES_QUERY } from "@/sanity/lib/queries";
-
 export default async function Page() {
-  const initial = await loadQuery<SanityDocument[]>(VOTES_QUERY);
+  const data = [
+    {
+      daerah: "jepara",
+      title:
+        "Bursa Kandidat Calon Bupati dan Wakil Bupati Kabupaten Jepara Tahun",
+      description:
+        "Menurutmu sing cocok mimpin kabupaten Jepara selanjute sopo lurrr ???",
+    },
+  ];
 
   return (
     <main className="mx-auto my-8 min-h-screen max-w-screen-xl px-4 text-center">
-      {initial.data.map((vote) => (
+      {data.map((vote) => (
         <Link key={vote.daerah} href={`/voting/${vote.daerah.toLowerCase()}`}>
           <div className="my-4 cursor-pointer rounded-md border bg-card p-4 text-left shadow-md">
             <h1 className="text-xl font-bold">{vote.title}</h1>
