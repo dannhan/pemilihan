@@ -26,8 +26,8 @@ export function ModeSwitcher() {
         <div
           className={cn(
             "peer relative box-content h-6 w-11 rounded-full bg-primary",
-            "after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-focus:outline-none",
-            "dark:after:translate-x-full",
+            "after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-primary after:shadow-[inset_44px_0px_0px_0px_white] after:transition-all after:content-[''] peer-focus:outline-none",
+            "dark:after:translate-x-full dark:after:bg-primary dark:after:[box-shadow:inset_-8px_0px_0px_0px_white]",
           )}
         ></div>
       </label>
