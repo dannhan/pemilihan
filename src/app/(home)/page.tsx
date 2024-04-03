@@ -10,8 +10,6 @@ export default async function Page() {
   const data: Poll[] = [];
   snapshot.forEach((doc) => data.push({ id: doc.id, ...doc.data() } as Poll));
 
-  console.log({ data });
-
   return (
     <main className="mx-auto my-8 min-h-screen max-w-screen-xl px-4 text-center">
       {data.map((vote) => (
