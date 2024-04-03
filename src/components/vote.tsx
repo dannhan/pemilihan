@@ -1,8 +1,9 @@
 "use client";
 
-// todo
-
 import { useState } from "react";
+import Image from "next/image";
+import { Option } from "@/lib/type";
+
 import { User } from "lucide-react";
 import { Thanks } from "@/components/thanks";
 
@@ -11,7 +12,7 @@ export function Vote({
   candidates,
 }: {
   title: string;
-  candidates: { name: string }[];
+  candidates: Option[];
 }) {
   const [selected, setSelected] = useState<null | string>(null);
 
@@ -40,7 +41,18 @@ export function Vote({
                 }}
               >
                 <div className="flex h-40 w-full items-center justify-center overflow-hidden pb-0">
-                  <User className="block h-full max-h-full w-full max-w-full bg-muted" />
+                  {candidate.image ? (
+                    <div className="flex h-full w-full items-center justify-center bg-muted">
+                      <Image
+                        alt="candidate"
+                        src={candidate.image}
+                        height={160}
+                        width={140}
+                      />
+                    </div>
+                  ) : (
+                    <User className="block h-full max-h-full w-full max-w-full bg-muted" />
+                  )}
                 </div>
 
                 <p className="py-2">{candidate.name}</p>

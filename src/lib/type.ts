@@ -12,6 +12,6 @@ export type Poll = {
 export type Option = {
   id: string;
   name: string;
-  pollId: string;
-  imageURL?: string;
+  image: string;
+  // pollId: string;
 };

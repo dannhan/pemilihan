@@ -15,6 +15,13 @@ import { z } from "zod";
 import { createPollFormSchema as formSchema } from "@/lib/schema";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { firebaseAuth, firebaseFirestore } from "@/firebase/firebase";
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 
 import { cn } from "@/lib/utils";
 import { Plus, Trash } from "lucide-react";
@@ -31,6 +38,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { Readable } from "stream";
+import { useState } from "react";
 
 type FormValues = z.infer<typeof formSchema>;
 
@@ -54,7 +63,7 @@ export function CreatePollingForm() {
     name: "options",
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>, e: any) => {
     const user = firebaseAuth.currentUser;
     const colName = "polls";
 
@@ -75,10 +84,39 @@ export function CreatePollingForm() {
       const pollId = docRef.id;
 
       for (const option of values.options) {
+        let image = ""; 
+
+        if (option.image) {
+          const storage = getStorage();
+
+          const metadata = {
+            contentType: "image/jpeg",
+          };
+
+          // Upload file and metadata to the object 'images/mountains.jpg'
+          const storageRef = ref(storage, "images/" + option.image.name);
+          const uploadTask = uploadBytesResumable(
+            storageRef,
+            option.image,
+            metadata,
+          );
+
+          image = await new Promise((resolve) => {
+            uploadTask.on("state_changed", () => {
+              getDownloadURL(uploadTask.snapshot.ref)
+                .then((downloadURL) => {
+                  resolve(downloadURL);
+                })
+                .catch((error) => alert(error.message));
+            });
+          });
+        }
+
         await addDoc(
           collection(firebaseFirestore, `${colName}/${pollId}/options`),
           {
             name: option.value,
+            image,
           },
         );
       }
@@ -185,6 +223,8 @@ function OptionFormField({
   form: UseFormReturn<z.infer<typeof formSchema>>;
   remove: UseFieldArrayRemove;
 }) {
+  const [value, setValue] = useState("");
+
   return (
     <FormField
       key={item.id}
@@ -196,32 +236,68 @@ function OptionFormField({
             Ketikan Pilihan Dibawah Ini
           </FormLabel>
           <FormControl>
-            {index > 1 ? (
-              <div className="relative flex">
-                <Input
-                  {...field}
-                  required
-                  autoComplete="off"
-                  placeholder="Pilihan"
-                  className="focus-visible:outline-none focus-visible:ring-0"
-                />
+            <div className="relative flex flex-col md:flex-row">
+              <Input
+                {...field}
+                autoComplete="off"
+                placeholder="Pilihan"
+                required
+                className={cn(
+                  "focus-visible:border-primary focus-visible:outline-none focus-visible:ring-0  focus-visible:ring-offset-0",
+                  "rounded-b-none border-b-0",
+                  "md:rounded md:rounded-r-none md:border-b",
+                )}
+              />
+              {index > 1 ? (
                 <Button
                   variant="destructive"
-                  className="absolute right-0 rounded-l-none"
                   onClick={() => remove(index)}
+                  className="absolute right-0 rounded-b-none rounded-l-none md:rounded-r"
                 >
                   <Trash className="h-4 w-4" />
                 </Button>
-              </div>
-            ) : (
-              <Input
-                {...field}
-                required
-                autoComplete="off"
-                placeholder="Pilihan"
-                className="focus-visible:outline-none focus-visible:ring-0"
+              ) : (
+                ""
+              )}
+
+              <FormField
+                control={form.control}
+                name={`options.${index}.image`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <div
+                        className={cn(
+                          "flex w-full items-center rounded-b",
+                          "md:w-fit md:rounded-none md:rounded-r",
+                        )}
+                      >
+                        <FormLabel
+                          htmlFor={`dropzone-file-${index}`}
+                          className="h-10 cursor-pointer rounded-bl border bg-muted px-3 py-2.5 md:rounded-none"
+                        >
+                          JPG/PNG
+                        </FormLabel>
+                        <Input
+                          {...field}
+                          id={`dropzone-file-${index}`}
+                          type="file"
+                          accept="image/png, image/jpeg"
+                          className="rounded-l-none rounded-tr-none border file:hidden md:rounded-tr"
+                          value={value}
+                          onChange={(e) => {
+                            setValue(e.target.value);
+                            field.onChange(
+                              e.target.files ? e.target.files[0] : "",
+                            );
+                          }}
+                        />
+                      </div>
+                    </FormControl>
+                  </FormItem>
+                )}
               />
-            )}
+            </div>
           </FormControl>
         </FormItem>
       )}
