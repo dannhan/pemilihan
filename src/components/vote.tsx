@@ -42,12 +42,12 @@ export function Vote({
               >
                 <div className="flex h-40 w-full items-center justify-center overflow-hidden pb-0">
                   {candidate.image ? (
-                    <div className="flex h-full w-full items-center justify-center bg-muted">
+                    <div className="relative h-full w-full bg-muted">
                       <Image
+                        fill
                         alt="candidate"
                         src={candidate.image}
-                        height={160}
-                        width={140}
+                        className="object-contain"
                       />
                     </div>
                   ) : (
