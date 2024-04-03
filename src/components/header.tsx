@@ -42,9 +42,30 @@ export function Header({ session }: { session: Session | null }) {
           <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between gap-5 px-4">
             <Link href="/" className="flex items-center">
               <Image width={32} height={32} src="/logo.png" alt="logo" />
+              <span className="ms-2 self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+                Polling Kita
+              </span>
             </Link>
 
             <div className="flex items-center gap-5 md:order-2">
+              <ul className="mt-0 hidden space-x-4 font-semibold text-foreground/50 md:flex">
+                {links.map(({ href, label }) => (
+                  <li key={`${href}-${label}`}>
+                    <Link
+                      href={href}
+                      className={cn(
+                        "transition-colors hover:text-foreground/80",
+                        "block py-2",
+                        href === pathname && "text-foreground/90",
+                      )}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+
               <ModeSwitcher />
 
               {session ? (
@@ -75,7 +96,11 @@ export function Header({ session }: { session: Session | null }) {
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <Button size="sm" className="rounded-lg px-5" asChild>
+                <Button
+                  size="sm"
+                  className="hidden rounded-lg px-5 md:flex"
+                  asChild
+                >
                   <Link href="/login">
                     Login
                     <LoginIcon className="ml-2 h-3 w-3" />
@@ -93,54 +118,61 @@ export function Header({ session }: { session: Session | null }) {
                 <span className="sr-only">Open main menu</span>
               </Button>
             </div>
-
-            {/* sidenav */}
-            <div
-              className={cn(
-                "invisible fixed left-0 top-0 h-screen w-screen cursor-default bg-black/50 opacity-0 transition-opacity duration-300",
-                isMenuOpen && "visible opacity-100 md:invisible",
-              )}
-              onClick={() => setIsMenuOpen(false)}
-            />
-            <aside
-              className={cn(
-                "fixed right-0 top-0 z-20 h-screen w-[21rem] max-w-[80%] translate-x-full overflow-y-auto border-l bg-background transition-transform duration-300",
-                "md:static md:order-1 md:flex md:h-auto md:w-auto md:flex-grow md:translate-x-0 md:justify-end  md:border-none md:bg-transparent",
-                isMenuOpen && "block translate-x-0",
-              )}
-            >
-              <header className="flex h-[57px] items-center justify-between border-b p-4 md:hidden">
-                <h1 className="text-lg font-semibold">Menu</h1>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
-                >
-                  <X />
-                </Button>
-              </header>
-
-              <ul className="flex flex-col p-4 font-semibold text-foreground/50 md:mt-0 md:flex-row md:space-x-4 md:p-0">
-                {links.map(({ href, label }) => (
-                  <li key={`${href}-${label}`}>
-                    <Link
-                      href={href}
-                      className={cn(
-                        "transition-colors hover:text-foreground/80",
-                        "block py-2 md:bg-transparent md:p-0",
-                        href === pathname && "text-foreground/90",
-                      )}
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </aside>
           </div>
         </nav>
       </header>
+
+      {/* sidenav */}
+      <aside
+        className={cn(
+          "fixed right-0 top-0 z-50 flex h-screen w-[21rem] max-w-[80%] translate-x-full flex-col overflow-y-auto border-l bg-background transition-transform duration-300",
+          isMenuOpen && "translate-x-0",
+        )}
+      >
+        <header className="flex h-[57px] items-center justify-between border-b p-4">
+          <h1 className="text-lg font-semibold">Menu</h1>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            <X />
+          </Button>
+        </header>
+
+        <ul className="flex grow flex-col p-4 font-semibold text-foreground/50">
+          {links.map(({ href, label }) => (
+            <li key={`${href}-${label}`}>
+              <Link
+                href={href}
+                className={cn(
+                  "block py-2 transition-colors hover:text-foreground/80",
+                  href === pathname && "text-foreground/90",
+                )}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {label}
+              </Link>
+            </li>
+          ))}
+
+          <li className="flex grow flex-col justify-end">
+            <Button size="sm" className="flex px-5" asChild>
+              <Link href="/login">
+                Login
+                <LoginIcon className="ml-2 h-3 w-3" />
+              </Link>
+            </Button>
+          </li>
+        </ul>
+      </aside>
+      <div
+        className={cn(
+          "invisible fixed left-0 top-0 z-40 h-screen w-screen cursor-default bg-black/50 opacity-0 transition-all duration-300",
+          isMenuOpen && "visible opacity-100",
+        )}
+        onClick={() => setIsMenuOpen(false)}
+      />
     </>
   );
 }
