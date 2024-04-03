@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   FieldArrayWithId,
@@ -9,6 +11,10 @@ import {
   useForm,
 } from "react-hook-form";
 import { z } from "zod";
+
+import { createPollFormSchema as formSchema } from "@/lib/schema";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { firebaseAuth, firebaseFirestore } from "@/firebase/firebase";
 
 import { cn } from "@/lib/utils";
 import { Plus, Trash } from "lucide-react";
@@ -26,22 +32,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 
-const formSchema = z.object({
-  question: z.string().min(10).max(160, {
-    message: "Question must not be longer than 160 characters.",
-  }),
-  options: z.array(z.object({ value: z.string().min(1) })).min(2, {
-    message: "Options must be at least 2.",
-  }),
-  private: z.boolean().default(false).optional(),
-  multiple: z.boolean().default(false).optional(),
-  comment: z.boolean().default(false).optional(),
-});
-
 type FormValues = z.infer<typeof formSchema>;
 
 const defaultValues: Partial<FormValues> = {
-  question: "",
+  title: "",
   options: [{ value: "" }, { value: "" }],
   private: false,
   multiple: false,
@@ -49,6 +43,8 @@ const defaultValues: Partial<FormValues> = {
 };
 
 export function CreatePollingForm() {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues,
@@ -57,12 +53,47 @@ export function CreatePollingForm() {
     control: form.control,
     name: "options",
   });
-  const onSubmit = (values: z.infer<typeof formSchema>) => console.log(values);
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const user = firebaseAuth.currentUser;
+    const colName = "polls";
+
+    if (!user) {
+      alert("Anda harus login untuk membuat poll!");
+      return;
+    }
+
+    try {
+      const docRef = await addDoc(collection(firebaseFirestore, colName), {
+        title: values.title,
+        private: values.private,
+        multiple: values.multiple,
+        comment: values.comment,
+        date_created: serverTimestamp(),
+        userId: user?.uid,
+      });
+      const pollId = docRef.id;
+
+      for (const option of values.options) {
+        await addDoc(
+          collection(firebaseFirestore, `${colName}/${pollId}/options`),
+          {
+            name: option.value,
+          },
+        );
+      }
+
+      router.push("/");
+      router.refresh();
+    } catch (error) {
+      alert("Something wrong");
+    }
+  };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <QuestionFormField form={form} />
+        <TitleFormField form={form} />
 
         <div>
           {fields.map((item, index) => {
@@ -108,7 +139,7 @@ export function CreatePollingForm() {
   );
 }
 
-function QuestionFormField({
+function TitleFormField({
   form,
 }: {
   form: UseFormReturn<z.infer<typeof formSchema>>;
@@ -118,17 +149,22 @@ function QuestionFormField({
   return (
     <FormField
       control={form.control}
-      name="question"
+      name="title"
       render={({ field }) => (
         <FormItem>
           <FormLabel>Pertanyaan</FormLabel>
           <FormControl>
-            <Textarea {...field} maxLength={160} className="text-lg" />
+            <Textarea
+              {...field}
+              minLength={10}
+              maxLength={160}
+              className="text-lg"
+            />
           </FormControl>
           <FormDescription>
             Characters left:{" "}
             <span className="font-semibold">
-              {maxChars - form.watch("question").length}
+              {maxChars - form.watch("title").length}
             </span>
           </FormDescription>
           <FormMessage />

@@ -2,7 +2,7 @@ import { NextAuthOptions, getServerSession } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
 import { FirestoreAdapter } from "@auth/firebase-adapter";
-import { adminAuth, adminDb } from "@/firebase/firebaseAdmin";
+import { firebaseAdminAuth, firebaseAdminFirestore } from "@/firebase/firebaseAdmin";
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -23,7 +23,7 @@ export const authOptions: NextAuthOptions = {
       if (session?.user && token.sub) {
         session.user.id = token.sub;
 
-        const firebaseToken = await adminAuth.createCustomToken(token.sub);
+        const firebaseToken = await firebaseAdminAuth.createCustomToken(token.sub);
         session.firebaseToken = firebaseToken;
       }
 
@@ -38,7 +38,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
   // @ts-expect-error
-  adapter: FirestoreAdapter(adminDb),
+  adapter: FirestoreAdapter(firebaseAdminFirestore),
   // debug: process.env.NODE_ENV !== "production",
 };
 

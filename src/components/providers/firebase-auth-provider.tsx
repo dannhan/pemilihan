@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { signInWithCustomToken } from "firebase/auth";
 import { firebaseAuth } from "@/firebase/firebase";
 
-async function syncFirebaseAuth(session: Session) {
+async function syncFirebaseAuth(session: Session | null) {
   if (session && session.firebaseToken) {
     try {
       await signInWithCustomToken(firebaseAuth, session.firebaseToken);
@@ -23,8 +23,6 @@ export function FirebaseAuthProvider({ children }: { children: ReactNode }) {
   const { data: session } = useSession();
 
   useEffect(() => {
-    if (!session) return;
-
     syncFirebaseAuth(session);
   }, [session]);
 
