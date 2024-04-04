@@ -1,19 +1,8 @@
 import Link from "next/link";
-import { firebaseAdminFirestore } from "@/firebase/firebaseAdmin";
-import type { Poll } from "@/lib/type";
+import { getPublicPollsAdmin } from "@/firebase/services/admin";
 
 export default async function Page() {
-  const colName = process.env.NODE_ENV !== "production" ? "tests" : "polls";
-
-  const collectionRef = firebaseAdminFirestore.collection(colName);
-  const snapshot = await collectionRef
-    .select("title", "date_created", "private")
-    .where("private", "==", false)
-    .orderBy("date_created", "desc")
-    .get();
-
-  const data: Poll[] = [];
-  snapshot.forEach((doc) => data.push({ id: doc.id, ...doc.data() } as Poll));
+  const data = await getPublicPollsAdmin();
 
   return (
     <main className="mx-auto my-8 min-h-screen max-w-screen-xl px-4 text-center">

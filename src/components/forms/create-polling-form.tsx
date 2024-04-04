@@ -13,9 +13,6 @@ import {
 import { z } from "zod";
 
 import { createPollFormSchema as formSchema } from "@/lib/schema";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { firebaseAuth, firebaseFirestore } from "@/firebase/firebase";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 import { cn } from "@/lib/utils";
 import { LoaderCircle, Plus, X } from "lucide-react";
@@ -33,6 +30,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { postPollClient } from "@/firebase/services/client";
 
 type FormValues = z.infer<typeof formSchema>;
 
@@ -46,6 +44,7 @@ const defaultValues: Partial<FormValues> = {
 
 export function CreatePollingForm() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,56 +54,11 @@ export function CreatePollingForm() {
     control: form.control,
     name: "options",
   });
-
-  const [isLoading, setIsLoading] = useState(false);
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
 
-    const user = firebaseAuth.currentUser;
-    const colName = process.env.NODE_ENV !== "production" ? "tests" : "polls";
-
-    if (!user) {
-      alert("Anda harus login untuk membuat poll!");
-      return;
-    }
-
     try {
-      const docRef = await addDoc(collection(firebaseFirestore, colName), {
-        title: values.title,
-        private: values.private,
-        multiple: values.multiple,
-        comment: values.comment,
-        date_created: serverTimestamp(),
-        userId: user?.uid,
-      });
-      const pollId = docRef.id;
-
-      for (const option of values.options) {
-        let image = "";
-        let idx = 0;
-
-        if (option.image) {
-          const storage = getStorage();
-          const storageRef = ref(
-            storage,
-            `images/options/${pollId}/${option.image.name}-${idx}`,
-          );
-          const metadata = { contentType: "image/jpeg" };
-
-          await uploadBytes(storageRef, option.image, metadata);
-          image = await getDownloadURL(storageRef);
-        }
-
-        await addDoc(
-          collection(firebaseFirestore, `${colName}/${pollId}/options`),
-          {
-            name: option.value,
-            image,
-          },
-        );
-
-        idx = idx + 1;
-      }
+      await postPollClient(values);
 
       router.push("/");
       router.refresh();
