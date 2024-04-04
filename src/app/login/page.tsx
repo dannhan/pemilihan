@@ -8,9 +8,9 @@ export default function Page() {
       <section className="mt-4 flex flex-col gap-6 rounded-lg p-6 md:border md:shadow-md">
         <div className="space-y-2 text-center">
           <h1 className="text-2xl font-bold">Login</h1>
-          <p className="text-xs md:text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Anda disarankan membuat akun untuk mengelola polling Anda.
-            <br />
+            <br className="max-[520px]:hidden" />
             Saat ini, kami hanya menyediakan login melalui akun Google.
           </p>
         </div>
