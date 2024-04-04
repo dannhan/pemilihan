@@ -8,7 +8,7 @@ import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
 
 import { cn } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
+import { LogOutIcon, Menu, X } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,7 +37,7 @@ export function Header({ session }: { session: Session | null }) {
 
   return (
     <>
-      <header className="sticky top-0 overflow-x-clip">
+      <header className="sticky top-0 z-40 overflow-x-clip">
         <nav className="border-b py-2.5 backdrop-blur">
           <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between gap-5 px-4">
             <Link href="/" className="flex items-center">
@@ -71,7 +71,7 @@ export function Header({ session }: { session: Session | null }) {
               {session ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Avatar className="h-8 w-8 cursor-pointer">
+                    <Avatar className="hidden md:flex h-8 w-8 cursor-pointer">
                       <AvatarImage
                         src={session.user?.image || ""}
                         alt="@shadcn"
@@ -125,7 +125,7 @@ export function Header({ session }: { session: Session | null }) {
       {/* sidenav */}
       <aside
         className={cn(
-          "fixed right-0 top-0 z-50 flex h-screen w-[21rem] max-w-[80%] translate-x-full flex-col overflow-y-auto border-l bg-background transition-transform duration-300",
+          "fixed right-0 top-0 z-50 flex h-screen w-[21rem] max-w-[100%] translate-x-full flex-col overflow-y-auto border-l bg-background transition-transform duration-300",
           isMenuOpen && "translate-x-0",
         )}
       >
@@ -157,12 +157,39 @@ export function Header({ session }: { session: Session | null }) {
           ))}
 
           <li className="flex grow flex-col justify-end">
-            <Button size="sm" className="flex px-5" asChild>
-              <Link href="/login">
-                Login
-                <LoginIcon className="ml-2 h-3 w-3" />
-              </Link>
-            </Button>
+            {session ? (
+              <div className="flex items-center gap-2">
+                <Avatar className="h-10 w-10 cursor-pointer">
+                  <AvatarImage src={session.user?.image || ""} alt="@shadcn" />
+                  <AvatarFallback></AvatarFallback>
+                </Avatar>
+
+                <div>
+                  <h1 className="truncate leading-5">
+                    {session.user?.name || ""}
+                  </h1>
+                  <h1 className="truncate leading-5">
+                    {session.user?.email || ""}
+                  </h1>
+                </div>
+
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="grow justify-end p-0 hover:bg-transparent text-destructive hover:text-destructive/80"
+                  onClick={() => signOut()}
+                >
+                  <LogOutIcon />
+                </Button>
+              </div>
+            ) : (
+              <Button size="sm" className="flex px-5" asChild>
+                <Link href="/login">
+                  Login
+                  <LoginIcon className="ml-2 h-3 w-3" />
+                </Link>
+              </Button>
+            )}
           </li>
         </ul>
       </aside>
