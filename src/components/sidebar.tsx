@@ -57,13 +57,13 @@ export function Sidebar({ session, links, isMenuOpen, setIsMenuOpen }: Props) {
 
           <li className="flex grow flex-col justify-end">
             {session ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 max-w-100%">
                 <Avatar className="h-10 w-10 cursor-pointer">
                   <AvatarImage src={session.user?.image || ""} alt="@shadcn" />
                   <AvatarFallback></AvatarFallback>
                 </Avatar>
 
-                <div>
+                <div className="overflow-hidden">
                   <h1 className="truncate leading-5">
                     {session.user?.name || ""}
                   </h1>
