@@ -1,5 +1,5 @@
 import { getAuth } from "@/lib/auth";
-import { Header } from "@/components/header";
+import { Nav } from "@/components/nav";
 
 export default async function Layout({
   children,
@@ -10,7 +10,7 @@ export default async function Layout({
 
   return (
     <>
-      <Header session={session} />
+      <Nav session={session} />
       {children}
     </>
   );
