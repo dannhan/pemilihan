@@ -4,8 +4,14 @@ import type { Poll } from "@/lib/type";
 
 // todo: place this anywhere else
 export default async function Page() {
-  const collectionRef = firebaseAdminFirestore.collection("polls");
-  const snapshot = await collectionRef.select("title", "date_created", "private").where("private", "==", false).orderBy("date_created", "desc").get();
+  const colName = process.env.NODE_ENV === "production" ? "polls" : "tests";
+
+  const collectionRef = firebaseAdminFirestore.collection(colName);
+  const snapshot = await collectionRef
+    .select("title", "date_created", "private")
+    .where("private", "==", false)
+    .orderBy("date_created", "desc")
+    .get();
 
   const data: Poll[] = [];
   snapshot.forEach((doc) => data.push({ id: doc.id, ...doc.data() } as Poll));
@@ -18,7 +24,10 @@ export default async function Page() {
             <h1 className="text-xl font-bold">{vote.title}</h1>
             <p className="pt-2 text-sm text-gray-500">
               {/* Dibuat: {vote.date_created} */}
-              Dibuat: {new Date(vote.date_created.seconds * 1000).toLocaleDateString("en-GB")}
+              Dibuat:{" "}
+              {new Date(vote.date_created.seconds * 1000).toLocaleDateString(
+                "en-GB",
+              )}
             </p>
           </div>
         </Link>

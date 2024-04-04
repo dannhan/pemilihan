@@ -18,13 +18,12 @@ import { firebaseAuth, firebaseFirestore } from "@/firebase/firebase";
 import {
   getStorage,
   ref,
-  uploadBytes,
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
 
 import { cn } from "@/lib/utils";
-import { Plus, Trash } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -38,7 +37,6 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { Readable } from "stream";
 import { useState } from "react";
 
 type FormValues = z.infer<typeof formSchema>;
@@ -63,9 +61,9 @@ export function CreatePollingForm() {
     name: "options",
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>, e: any) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const user = firebaseAuth.currentUser;
-    const colName = "polls";
+    const colName = process.env.NODE_ENV === "production" ? "polls" : "tests";
 
     if (!user) {
       alert("Anda harus login untuk membuat poll!");
@@ -84,7 +82,7 @@ export function CreatePollingForm() {
       const pollId = docRef.id;
 
       for (const option of values.options) {
-        let image = ""; 
+        let image = "";
 
         if (option.image) {
           const storage = getStorage();
@@ -101,15 +99,9 @@ export function CreatePollingForm() {
             metadata,
           );
 
-          image = await new Promise((resolve) => {
-            uploadTask.on("state_changed", () => {
-              getDownloadURL(uploadTask.snapshot.ref)
-                .then((downloadURL) => {
-                  resolve(downloadURL);
-                })
-                .catch((error) => alert(error.message));
-            });
-          });
+          // todo: this is always throw an error
+          await uploadTask.on("state_changed");
+          image = await getDownloadURL(uploadTask.snapshot.ref);
         }
 
         await addDoc(
@@ -124,7 +116,7 @@ export function CreatePollingForm() {
       router.push("/");
       router.refresh();
     } catch (error) {
-      alert("Something wrong");
+      console.error(error);
     }
   };
 
@@ -171,7 +163,7 @@ export function CreatePollingForm() {
           </SettingFormField>
         </div>
 
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Buat Polling</Button>
       </form>
     </Form>
   );
@@ -226,82 +218,96 @@ function OptionFormField({
   const [value, setValue] = useState("");
 
   return (
-    <FormField
-      key={item.id}
-      control={form.control}
-      name={`options.${index}.value`}
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel className={cn(index !== 0 && "sr-only")}>
-            Ketikan Pilihan Dibawah Ini
-          </FormLabel>
-          <FormControl>
-            <div className="relative flex flex-col md:flex-row">
-              <Input
-                {...field}
-                autoComplete="off"
-                placeholder="Pilihan"
-                required
-                className={cn(
-                  "focus-visible:border-primary focus-visible:outline-none focus-visible:ring-0  focus-visible:ring-offset-0",
-                  "rounded-b-none border-b-0",
-                  "md:rounded md:rounded-r-none md:border-b",
-                )}
-              />
-              {index > 1 ? (
-                <Button
-                  variant="destructive"
-                  onClick={() => remove(index)}
-                  className="absolute right-0 rounded-b-none rounded-l-none md:rounded-r"
-                >
-                  <Trash className="h-4 w-4" />
-                </Button>
-              ) : (
-                ""
-              )}
+    <>
+      <label className={cn("mb-2 block font-medium", index !== 0 && "sr-only")}>
+        Ketikan Pilihan Dibawah Ini
+      </label>
+      <div className="relative mb-2 flex flex-col md:flex-row md:items-center">
+        <FormField
+          key={item.id}
+          control={form.control}
+          name={`options.${index}.value`}
+          render={({ field }) => (
+            <FormItem className="order-first grow">
+              <FormControl>
+                <Input
+                  {...field}
+                  autoComplete="off"
+                  placeholder="Pilihan"
+                  required
+                  className={cn(
+                    "focus-visible:border-primary focus-visible:outline-none focus-visible:ring-0  focus-visible:ring-offset-0",
+                    "rounded-b-none md:rounded md:rounded-r-none",
+                    index > 1 && "w-[calc(100%-3rem)] rounded-r-none md:w-full",
+                  )}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
 
-              <FormField
-                control={form.control}
-                name={`options.${index}.image`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <div
-                        className={cn(
-                          "flex w-full items-center rounded-b",
-                          "md:w-fit md:rounded-none md:rounded-r",
-                        )}
-                      >
-                        <FormLabel
-                          htmlFor={`dropzone-file-${index}`}
-                          className="h-10 cursor-pointer rounded-bl border bg-muted px-3 py-2.5 md:rounded-none"
-                        >
-                          JPG/PNG
-                        </FormLabel>
-                        <Input
-                          {...field}
-                          id={`dropzone-file-${index}`}
-                          type="file"
-                          accept="image/png, image/jpeg"
-                          className="rounded-l-none rounded-tr-none border file:hidden md:rounded-tr"
-                          value={value}
-                          onChange={(e) => {
-                            setValue(e.target.value);
-                            field.onChange(
-                              e.target.files ? e.target.files[0] : "",
-                            );
-                          }}
-                        />
-                      </div>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-          </FormControl>
-        </FormItem>
-      )}
-    />
+        <FormField
+          control={form.control}
+          name={`options.${index}.image`}
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <div
+                  className={cn(
+                    "flex w-full items-center rounded-b",
+                    "md:w-fit md:rounded-none md:rounded-r",
+                  )}
+                >
+                  <Input
+                    {...field}
+                    id={`dropzone-file-${index}`}
+                    type="file"
+                    accept="image/png, image/jpeg"
+                    className={cn(
+                      "peer rounded-l-none rounded-tr-none border border-l-0 file:hidden",
+                      "focus-visible:border-primary focus-visible:outline-none focus-visible:ring-0  focus-visible:ring-offset-0",
+                      "md:max-w-44 md:rounded-tr",
+                      index > 1 && "md:max-w-32 md:rounded-r-none",
+                    )}
+                    value={value}
+                    onChange={(e) => {
+                      setValue(e.target.value);
+                      field.onChange(e.target.files ? e.target.files[0] : "");
+                    }}
+                  />
+                  <FormLabel
+                    htmlFor={`dropzone-file-${index}`}
+                    className={cn(
+                      "order-first h-10 cursor-pointer bg-secondary px-3 py-2.5 hover:bg-secondary/80",
+                      "rounded-bl border border-r-0 md:rounded-none",
+                      "peer-focus-visible:border-primary",
+                    )}
+                  >
+                    JPG/PNG
+                  </FormLabel>
+                </div>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        {index > 1 ? (
+          <Button
+            variant="destructive"
+            onClick={() => remove(index)}
+            className={cn(
+              "absolute right-0 w-12 rounded-b-none rounded-l-none border px-3 md:rounded-r",
+              "focus-visible:border-primary focus-visible:outline-none focus-visible:ring-0  focus-visible:ring-offset-0",
+              "md:static",
+            )}
+          >
+            <X className="h-5 w-5" />
+          </Button>
+        ) : (
+          ""
+        )}
+      </div>
+    </>
   );
 }
 
