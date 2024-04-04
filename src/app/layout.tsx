@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
+import NextTopLoader from "nextjs-toploader";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { NextAuthProvider } from "@/components/providers/next-auth-provider";
 import { FirebaseAuthProvider } from "@/components/providers/firebase-auth-provider";
@@ -24,6 +25,7 @@ export default function RootLayout({
         <NextAuthProvider>
           <FirebaseAuthProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <NextTopLoader color={"#2563eb"} showSpinner={false} shadow={false} zIndex={99999} />
               {children}
             </ThemeProvider>
           </FirebaseAuthProvider>
