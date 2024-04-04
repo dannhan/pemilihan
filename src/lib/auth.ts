@@ -2,7 +2,10 @@ import { NextAuthOptions, getServerSession } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
 import { FirestoreAdapter } from "@auth/firebase-adapter";
-import { firebaseAdminAuth, firebaseAdminFirestore } from "@/firebase/firebaseAdmin";
+import {
+  firebaseAdminAuth,
+  firebaseAdminFirestore,
+} from "@/firebase/firebaseAdmin";
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -15,7 +18,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       httpOptions: {
         timeout: 10000,
-      }
+      },
     }),
   ],
   callbacks: {
@@ -23,7 +26,9 @@ export const authOptions: NextAuthOptions = {
       if (session?.user && token.sub) {
         session.user.id = token.sub;
 
-        const firebaseToken = await firebaseAdminAuth.createCustomToken(token.sub);
+        const firebaseToken = await firebaseAdminAuth.createCustomToken(
+          token.sub,
+        );
         session.firebaseToken = firebaseToken;
       }
 

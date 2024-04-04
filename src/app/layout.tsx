@@ -25,7 +25,12 @@ export default function RootLayout({
         <NextAuthProvider>
           <FirebaseAuthProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              <NextTopLoader color={"#2563eb"} showSpinner={false} shadow={false} zIndex={99999} />
+              <NextTopLoader
+                color={"#2563eb"}
+                showSpinner={false}
+                shadow={false}
+                zIndex={99999}
+              />
               {children}
             </ThemeProvider>
           </FirebaseAuthProvider>

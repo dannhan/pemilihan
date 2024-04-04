@@ -19,9 +19,9 @@ export default async function Page() {
     <main className="mx-auto my-8 min-h-screen max-w-screen-xl px-4 text-center">
       {data.map((vote) => (
         <Link key={vote.id} href={`/voting/${vote.id}`}>
-          <div className="my-2 sm:my-3 md:my-4 cursor-pointer rounded-md border bg-card p-4 text-left shadow-md">
-            <h1 className="sm:text-lg font-bold md:text-xl">{vote.title}</h1>
-            <p className="pt-2 text-xs sm:text-sm text-gray-500">
+          <div className="my-2 cursor-pointer rounded-md border bg-card p-4 text-left shadow-md sm:my-3 md:my-4">
+            <h1 className="font-bold sm:text-lg md:text-xl">{vote.title}</h1>
+            <p className="pt-2 text-xs text-gray-500 sm:text-sm">
               Dibuat:{" "}
               {new Date(vote.date_created.seconds * 1000).toLocaleDateString(
                 "en-GB",

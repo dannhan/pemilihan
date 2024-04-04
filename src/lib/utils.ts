@@ -18,4 +18,3 @@ export function getCurrentDate() {
 
   return formattedDate;
 }
-
