@@ -135,7 +135,6 @@ export function CreatePollingForm() {
             type="button"
             variant="secondary"
             size="sm"
-            className="mt-2"
             onClick={() => append({ value: "" })}
           >
             Tambah

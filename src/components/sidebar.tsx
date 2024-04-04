@@ -32,7 +32,8 @@ export function Sidebar({ session, links, isMenuOpen, setIsMenuOpen }: Props) {
           <h1 className="text-lg font-semibold">Menu</h1>
           <Button
             variant="ghost"
-            size="icon"
+            size="sm"
+            className="h-8 px-2.5"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             <X />
@@ -57,7 +58,7 @@ export function Sidebar({ session, links, isMenuOpen, setIsMenuOpen }: Props) {
 
           <li className="flex grow flex-col justify-end">
             {session ? (
-              <div className="flex items-center gap-2 max-w-100%">
+              <div className="max-w-100% flex items-center gap-2">
                 <Avatar className="h-10 w-10 cursor-pointer">
                   <AvatarImage src={session.user?.image || ""} alt="@shadcn" />
                   <AvatarFallback></AvatarFallback>

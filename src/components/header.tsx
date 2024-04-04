@@ -49,7 +49,6 @@ export function Header({ session, links, isMenuOpen, setIsMenuOpen }: Props) {
                     href={href}
                     className={cn(
                       "transition-colors hover:text-foreground/80",
-                      "block py-2",
                       href === pathname && "text-foreground/90",
                     )}
                     onClick={() => setIsMenuOpen(false)}
@@ -105,7 +104,7 @@ export function Header({ session, links, isMenuOpen, setIsMenuOpen }: Props) {
             <Button
               variant="ghost"
               size="sm"
-              className="rounded px-2.5 md:hidden"
+              className="h-8 rounded px-2.5 md:hidden"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               <Menu className="h-[1.3rem] w-[1.3rem]" />
