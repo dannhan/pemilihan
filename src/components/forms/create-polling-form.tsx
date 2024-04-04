@@ -15,15 +15,10 @@ import { z } from "zod";
 import { createPollFormSchema as formSchema } from "@/lib/schema";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { firebaseAuth, firebaseFirestore } from "@/firebase/firebase";
-import {
-  getStorage,
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 import { cn } from "@/lib/utils";
-import { Plus, X } from "lucide-react";
+import { LoaderCircle, Plus, X } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -61,7 +56,10 @@ export function CreatePollingForm() {
     name: "options",
   });
 
+  const [isLoading, setIsLoading] = useState(false);
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsLoading(true);
+
     const user = firebaseAuth.currentUser;
     const colName = process.env.NODE_ENV === "production" ? "polls" : "tests";
 
@@ -83,25 +81,18 @@ export function CreatePollingForm() {
 
       for (const option of values.options) {
         let image = "";
+        let idx = 0;
 
         if (option.image) {
           const storage = getStorage();
-
-          const metadata = {
-            contentType: "image/jpeg",
-          };
-
-          // Upload file and metadata to the object 'images/mountains.jpg'
-          const storageRef = ref(storage, "images/" + option.image.name);
-          const uploadTask = uploadBytesResumable(
-            storageRef,
-            option.image,
-            metadata,
+          const storageRef = ref(
+            storage,
+            `images/options/${pollId}/${option.image.name}-${idx}`,
           );
+          const metadata = { contentType: "image/jpeg" };
 
-          // todo: this is always throw an error
-          await uploadTask.on("state_changed");
-          image = await getDownloadURL(uploadTask.snapshot.ref);
+          await uploadBytes(storageRef, option.image, metadata);
+          image = await getDownloadURL(storageRef);
         }
 
         await addDoc(
@@ -111,12 +102,17 @@ export function CreatePollingForm() {
             image,
           },
         );
+
+        idx = idx + 1;
       }
 
       router.push("/");
       router.refresh();
+
+      setIsLoading(false);
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
     }
   };
 
@@ -163,7 +159,10 @@ export function CreatePollingForm() {
           </SettingFormField>
         </div>
 
-        <Button type="submit">Buat Polling</Button>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
+          Buat Polling
+        </Button>
       </form>
     </Form>
   );
