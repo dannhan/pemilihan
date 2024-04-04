@@ -4,7 +4,7 @@ import type { Poll } from "@/lib/type";
 
 // todo: place this anywhere else
 export default async function Page() {
-  const colName = process.env.NODE_ENV === "production" ? "polls" : "tests";
+  const colName = process.env.NODE_ENV !== "production" ? "tests" : "polls";
 
   const collectionRef = firebaseAdminFirestore.collection(colName);
   const snapshot = await collectionRef

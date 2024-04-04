@@ -61,7 +61,7 @@ export function CreatePollingForm() {
     setIsLoading(true);
 
     const user = firebaseAuth.currentUser;
-    const colName = process.env.NODE_ENV === "production" ? "polls" : "tests";
+    const colName = process.env.NODE_ENV !== "production" ? "tests" : "polls";
 
     if (!user) {
       alert("Anda harus login untuk membuat poll!");
@@ -108,10 +108,7 @@ export function CreatePollingForm() {
 
       router.push("/");
       router.refresh();
-
-      setIsLoading(false);
     } catch (error) {
-      console.error(error);
       setIsLoading(false);
     }
   };
