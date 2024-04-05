@@ -13,5 +13,9 @@ export type Option = {
   id: string;
   name: string;
   image: string;
-  // pollId: string;
+  count?: number;
 };
+
+export type Vote = {
+  option: string;
+}

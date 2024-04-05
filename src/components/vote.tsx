@@ -3,17 +3,15 @@
 import { useState } from "react";
 import Image from "next/image";
 
-import { firebaseAuth, firebaseFirestore } from "@/firebase/firebase";
-import { collection, addDoc } from "firebase/firestore";
-
 import { cn } from "@/lib/utils";
 import { Option } from "@/lib/type";
 
-import { Share, Share2, User } from "lucide-react";
+import { Share2, User } from "lucide-react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Thanks } from "@/components/thanks";
 import { SeeResultButton } from "@/components/see-result-button";
 import { Button } from "./ui/button";
+import { postVoteClient } from "@/firebase/services/client";
 
 export function Vote({
   params,
@@ -25,25 +23,15 @@ export function Vote({
   className?: string;
 }) {
   const [selected, setSelected] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (candidate: Option) => {
-    const user = firebaseAuth.currentUser;
-    if (!user) {
-      alert("Anda harus login terlebih dahulu!");
-      return;
-    }
+    setIsLoading(true);
+    await postVoteClient(params.id, candidate.name);
+    setIsLoading(false);
 
     setSelected(true);
     window.scrollTo({ top: 0 });
-
-    const colName = process.env.NODE_ENV !== "production" ? "tests" : "polls";
-    await addDoc(
-      collection(firebaseFirestore, `${colName}/${params.id}/votes`),
-      {
-        userId: user.uid,
-        optionName: candidate.name,
-      },
-    ).catch((error) => console.log(error.message));
   };
 
   return selected ? (
@@ -60,6 +48,7 @@ export function Vote({
               <button
                 className="group h-full w-full max-w-80 rounded border"
                 onClick={() => onSubmit(candidate)}
+                disabled={isLoading}
               >
                 <AspectRatio ratio={4 / 3}>
                   {candidate.image ? (

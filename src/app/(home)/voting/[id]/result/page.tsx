@@ -1,22 +1,19 @@
 import Link from "next/link";
-import { firebaseAdminFirestore } from "@/firebase/firebaseAdmin";
 
 import { ChevronLeft } from "lucide-react";
-import type { Option } from "@/lib/type";
 import { Button } from "@/components/ui/button";
+import { getResultById } from "@/firebase/services/admin";
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const colName = process.env.NODE_ENV !== "production" ? "tests" : "polls";
+  const { options, votes } = await getResultById(params.id);
 
-  const pollRef = firebaseAdminFirestore.collection(colName).doc(params.id);
-
-  const options: Option[] = [];
-  const snapshot = await pollRef.collection("options").get();
-  snapshot.forEach((doc) =>
-    options.push({ id: doc.id, ...doc.data() } as Option),
-  );
-
-  const votesRef = pollRef.collection("votes");
+  const result: any = {};
+  votes.forEach(({ option }) => {
+    result[option] = (result[option] || 0) + 1;
+  });
+  options.forEach((option) => {
+    option.count = result[option.name] || 0;
+  });
 
   return (
     <main className="mx-auto mt-6 min-h-screen max-w-4xl items-center space-y-2 px-4">
@@ -27,15 +24,15 @@ export default async function Page({ params }: { params: { id: string } }) {
         </Link>
       </Button>
 
-      <h1 className="block text-xl">
-        Total Suara: {(await votesRef.count().get()).data().count}
-      </h1>
+      {options
+        .sort((a, b) => b.count! - a.count!)
+        .map((option) => (
+          <h1 key={option.name} className="block text-xl">
+            {`${option.name}: ${option.count}`}
+          </h1>
+        ))}
 
-      {options.map(async (option) => (
-        <h1 key={option.name} className="block text-xl">
-          {`${option.name}: ${(await votesRef.where("optionName", "==", option.name).count().get()).data().count}`}
-        </h1>
-      ))}
+      <h1 className="block text-xl">Total Suara: {votes.length}</h1>
     </main>
   );
 }
