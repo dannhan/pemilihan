@@ -45,7 +45,7 @@ export async function postPollClient(values: z.infer<typeof formSchema>) {
 
       await addDoc(
         collection(firebaseFirestore, `${colName}/${pollId}/options`),
-        { name: option.value, image },
+        { name: option.value, image, date_created: serverTimestamp() },
       );
     }
   } catch (error) {

@@ -23,10 +23,19 @@ export async function getPollByIdAdmin(id: string) {
   const pollRef = firebaseAdminFirestore.collection(colName).doc(id);
   const poll = (await pollRef.get()).data() as Poll;
 
-  const snapshot = await pollRef.collection("options").get();
+  const snapshot = await pollRef
+    .collection("options")
+    .orderBy("date_created")
+    .get();
 
   const options: Option[] = [];
-  snapshot.forEach((doc) => options.push({ id: doc.id, ...doc.data() } as Option));
+  snapshot.forEach((doc) =>
+    options.push({
+      id: doc.id,
+      name: doc.data().name,
+      image: doc.data().image,
+    } as Option),
+  );
 
-  return { poll, options  };
+  return { poll, options };
 }
