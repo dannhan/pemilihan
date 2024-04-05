@@ -4,6 +4,7 @@ import { createPollFormSchema as formSchema } from "@/lib/schema";
 import { addDoc, collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { firebaseAuth, firebaseFirestore } from "@/firebase/firebase";
+import { User } from "firebase/auth";
 
 const colName = process.env.NODE_ENV !== "production" ? "tests" : "polls";
 
@@ -53,13 +54,7 @@ export async function postPollClient(values: z.infer<typeof formSchema>) {
   }
 }
 
-export async function postVoteClient(pollId: string, option: string) {
-  const user = firebaseAuth.currentUser;
-  if (!user) {
-    alert("Anda harus login terlebih dahulu!");
-    return;
-  }
-
+export async function postVoteClient(pollId: string, option: string, user: User) {
   const colName = process.env.NODE_ENV !== "production" ? "tests" : "polls";
   await setDoc(doc(firebaseFirestore, `${colName}/${pollId}/votes`, `${user.uid}_${pollId}`), {
     option,

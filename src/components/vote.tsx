@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import { Option } from "@/lib/type";
@@ -9,6 +10,8 @@ import { Option } from "@/lib/type";
 import { User } from "lucide-react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Thanks } from "@/components/thanks";
+
+import { firebaseAuth } from "@/firebase/firebase";
 import { postVoteClient } from "@/firebase/services/client";
 
 export function Vote({
@@ -22,10 +25,20 @@ export function Vote({
 }) {
   const [selected, setSelected] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const onSubmit = async (candidate: Option) => {
     setIsLoading(true);
-    await postVoteClient(params.id, candidate.name);
+    const user = firebaseAuth.currentUser;
+    if (!user) {
+      // remember the last page and redirect to that page after login
+      alert("Anda harus login terlebih dahulu!");
+      router.push("/login");
+
+      return;
+    }
+
+    await postVoteClient(params.id, candidate.name, user);
     setIsLoading(false);
 
     setSelected(true);
