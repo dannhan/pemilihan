@@ -15,9 +15,16 @@ type Props = {
   session: Session | null;
   isMenuOpen: boolean;
   setIsMenuOpen: Dispatch<SetStateAction<boolean>>;
+  redirect: string;
 };
 
-export function Sidebar({ session, links, isMenuOpen, setIsMenuOpen }: Props) {
+export function Sidebar({
+  session,
+  links,
+  isMenuOpen,
+  setIsMenuOpen,
+  redirect,
+}: Props) {
   const pathname = usePathname();
 
   return (
@@ -84,7 +91,7 @@ export function Sidebar({ session, links, isMenuOpen, setIsMenuOpen }: Props) {
               </div>
             ) : (
               <Button size="sm" className="flex px-5" asChild>
-                <Link href="/login">
+                <Link href={`/login?redirect=${redirect}`}>
                   Login
                   <LoginIcon className="ml-2 h-3 w-3" />
                 </Link>

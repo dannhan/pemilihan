@@ -25,9 +25,16 @@ type Props = {
   session: Session | null;
   isMenuOpen: boolean;
   setIsMenuOpen: Dispatch<SetStateAction<boolean>>;
+  redirect: string;
 };
 
-export function Header({ session, links, isMenuOpen, setIsMenuOpen }: Props) {
+export function Header({
+  session,
+  links,
+  isMenuOpen,
+  setIsMenuOpen,
+  redirect,
+}: Props) {
   const pathname = usePathname();
 
   return (
@@ -95,7 +102,7 @@ export function Header({ session, links, isMenuOpen, setIsMenuOpen }: Props) {
                 className="hidden rounded-full border-2 border-primary px-5 text-primary hover:bg-primary hover:text-primary-foreground md:flex"
                 asChild
               >
-                <Link href="/login">
+                <Link href={`/login?redirect=${redirect}`}>
                   Login
                   <LoginIcon className="ml-2 h-3 w-3" />
                 </Link>
