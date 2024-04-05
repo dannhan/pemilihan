@@ -37,7 +37,7 @@ export function Header({ session, links, isMenuOpen, setIsMenuOpen }: Props) {
           <Link href="/" className="flex items-center">
             <Image width={32} height={32} src="/logo.png" alt="logo" />
             <span className="ms-2 self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-              Polling Kita
+              Check Polling
             </span>
           </Link>
 

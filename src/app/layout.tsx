@@ -12,7 +12,7 @@ import { TailwindIndicator } from "@/components/tailwind-indicator";
 const plus_Jakarta_Sans = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Polling Kita",
+  title: "Check Polling",
   description: "Polling Generator",
 };
 
