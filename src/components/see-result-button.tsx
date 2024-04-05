@@ -2,9 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { PieChart } from "lucide-react";
 
-type Props = { params: { id: string } };
-export function SeeResultButton({ params }: Props) {
+type Props = { params: { id: string }; className?: string };
+export function SeeResultButton({ params, className }: Props) {
   const router = useRouter();
 
   return (
@@ -14,7 +15,9 @@ export function SeeResultButton({ params }: Props) {
         router.push(`${params.id}/result`);
         router.refresh();
       }}
+      className={className}
     >
+      <PieChart className="w-4 h-4 mr-3" />
       Lihat Hasil Polling
     </Button>
   );
