@@ -6,7 +6,14 @@ export default async function middleware(req: NextRequest) {
   const isAuthenticated = !!token;
 
   if (req.nextUrl.pathname.startsWith("/login") && isAuthenticated) {
-    return NextResponse.redirect(new URL("/", req.url));
+    const nextUrl = req.nextUrl;
+    const redirect = nextUrl.searchParams.get("redirect");
+
+    if (redirect) {
+      return NextResponse.redirect(new URL(redirect, req.url));
+    } else {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
   }
 }
 

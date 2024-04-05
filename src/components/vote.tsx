@@ -31,9 +31,10 @@ export function Vote({
     setIsLoading(true);
     const user = firebaseAuth.currentUser;
     if (!user) {
-      // remember the last page and redirect to that page after login
+      const redirect = encodeURIComponent(`/voting/${params.id}`);
+
       alert("Anda harus login terlebih dahulu!");
-      router.push("/login");
+      router.push(`/login?redirect=${redirect}`);
 
       return;
     }
