@@ -7,6 +7,7 @@ import { FirebaseAuthProvider } from "@/components/providers/firebase-auth-provi
 import { ThemeProvider } from "@/components/providers/theme-provider";
 
 import { TopLoader } from "@/components/top-loader";
+import { TailwindIndicator } from "@/components/tailwind-indicator";
 
 const plus_Jakarta_Sans = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -32,6 +33,7 @@ export default function RootLayout({
             >
               <TopLoader />
               {children}
+              <TailwindIndicator />
             </ThemeProvider>
           </FirebaseAuthProvider>
         </NextAuthProvider>
