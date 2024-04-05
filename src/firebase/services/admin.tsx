@@ -16,6 +16,7 @@ export async function getPublicPollsAdmin() {
   const data: Poll[] = [];
   snapshot.forEach((doc) => data.push({ id: doc.id, ...doc.data() } as Poll));
 
+  console.log("PUBLIC POLLS RETRIEVED...");
   return data;
 }
 
@@ -37,6 +38,7 @@ export async function getPollByIdAdmin(id: string) {
     } as Option),
   );
 
+  console.log("POLL RETRIEVED...");
   return { poll, options };
 }
 
@@ -51,6 +53,7 @@ export async function getResultById(id: string) {
       transaction.get(pollRef.collection("votes")),
     ]);
 
+    console.log("POLL RESULT RETRIEVED...");
     return { optionsSnapshot, votesSnapshot };
   });
 
