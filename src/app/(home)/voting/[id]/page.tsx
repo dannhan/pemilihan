@@ -26,7 +26,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       <div className="my-4 flex w-full flex-col justify-center">
         <div className="mx-auto flex w-full max-w-80 flex-col gap-2 sm:max-w-none">
           <SeeResultButton params={params} />
-          <Button variant="secondary" className="border">
+          <Button variant="secondary" className="border hidden">
             <Share2 className="mr-3 h-4 w-4" />
             Bagikan Poling
           </Button>
