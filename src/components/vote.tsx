@@ -49,7 +49,7 @@ export function Vote({
     <Thanks />
   ) : (
     <section className={className}>
-      <ul className={cn("flex w-full flex-wrap gap-8")}>
+      <ul className={cn("flex w-full flex-wrap gap-4 sm:gap-8")}>
         {candidates.map((candidate) => (
           <li
             key={candidate.name}

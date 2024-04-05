@@ -24,7 +24,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       />
 
       <div className="my-4 flex w-full flex-col justify-center">
-        <div className="mx-auto flex w-full max-w-80 flex-col gap-2 md:max-w-none">
+        <div className="mx-auto flex w-full max-w-80 flex-col gap-2 sm:max-w-none">
           <SeeResultButton params={params} />
           <Button variant="secondary" className="border">
             <Share2 className="mr-3 h-4 w-4" />

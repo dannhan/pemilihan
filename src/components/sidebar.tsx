@@ -46,8 +46,8 @@ export function Sidebar({ session, links, isMenuOpen, setIsMenuOpen }: Props) {
               <Link
                 href={href}
                 className={cn(
-                  "block py-2 transition-colors hover:text-foreground/80",
-                  href === pathname && "text-foreground/90",
+                  "block py-2 transition-colors hover:text-primary/80",
+                  href === pathname && "text-primary/90",
                 )}
                 onClick={() => setIsMenuOpen(false)}
               >

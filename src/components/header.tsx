@@ -42,14 +42,14 @@ export function Header({ session, links, isMenuOpen, setIsMenuOpen }: Props) {
           </Link>
 
           <div className="flex items-center gap-5 md:order-2">
-            <ul className="mt-0 hidden space-x-4 font-semibold text-foreground/50 md:flex">
+            <ul className="mt-0 hidden space-x-4 font-medium text-foreground/50 md:flex">
               {links.map(({ href, label }) => (
                 <li key={`${href}-${label}`}>
                   <Link
                     href={href}
                     className={cn(
-                      "transition-colors hover:text-foreground/80",
-                      href === pathname && "text-foreground/90",
+                      "transition-colors hover:text-primary/80",
+                      href === pathname && "text-primary/90",
                     )}
                     onClick={() => setIsMenuOpen(false)}
                   >
@@ -90,8 +90,9 @@ export function Header({ session, links, isMenuOpen, setIsMenuOpen }: Props) {
               </DropdownMenu>
             ) : (
               <Button
+                variant="outline"
                 size="sm"
-                className="hidden rounded-lg px-5 md:flex"
+                className="hidden rounded-full border-2 border-primary px-5 text-primary hover:bg-primary hover:text-primary-foreground md:flex"
                 asChild
               >
                 <Link href="/login">
