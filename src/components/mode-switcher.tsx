@@ -25,7 +25,7 @@ export function ModeSwitcher() {
         />
         <div
           className={cn(
-            "peer relative box-content h-6 w-11 rounded-full bg-primary",
+            "peer relative box-content h-6 w-11 rounded-full bg-primary shadow-[0_0.5rem_1rem_-0.5rem] shadow-primary",
             "after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-primary after:shadow-[inset_44px_0px_0px_0px_white] after:transition-all after:content-[''] peer-focus:outline-none",
             "dark:after:translate-x-full dark:after:bg-primary dark:after:[box-shadow:inset_-8px_0px_0px_0px_white]",
           )}

@@ -32,7 +32,7 @@ export function Header({ session, links, isMenuOpen, setIsMenuOpen }: Props) {
 
   return (
     <header className="sticky top-0 z-40 overflow-x-clip">
-      <nav className="border-b py-2.5 backdrop-blur">
+      <nav className="border-b bg-background/85 py-2.5 backdrop-blur">
         <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between gap-5 px-4">
           <Link href="/" className="flex items-center">
             <Image width={32} height={32} src="/logo.png" alt="logo" />
