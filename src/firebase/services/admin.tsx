@@ -55,7 +55,7 @@ export async function getResultById(id: string) {
   });
 
   // Process options
-  const options: Omit<Option, "id">[] = [];
+  const options: Omit<Option, "id" | "image">[] = [];
   snapshot.optionsSnapshot.forEach((doc) => options.push({ ...doc.data() } as Option));
 
   // Process votes

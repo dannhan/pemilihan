@@ -14,6 +14,7 @@ export type Option = {
   name: string;
   image: string;
   count?: number;
+  percentage?: number;
 };
 
 export type Vote = {
