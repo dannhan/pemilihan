@@ -54,7 +54,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                   />
                   <h1
                     className={cn(
-                      "absolute left-2 top-0.5 leading-none text-black lg:[font-size:0.75rem]",
+                      "absolute left-2 top-0.5 leading-none text-black [font-size:0.75rem]",
                     )}
                   >
                     {option.percentage?.toFixed(2)}%
