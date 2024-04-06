@@ -4,7 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-import { cn } from "@/lib/utils";
 import { Option } from "@/lib/type";
 
 import { User } from "lucide-react";
@@ -50,14 +49,14 @@ export function Vote({
     <Thanks />
   ) : (
     <section className={className}>
-      <ul className={cn("flex w-full flex-wrap gap-4 sm:gap-8")}>
+      <ul className="flex w-full flex-wrap gap-4 sm:gap-8">
         {candidates.map((candidate) => (
           <li
             key={candidate.name}
             className="flex w-full justify-center rounded sm:w-[calc(50%-16px)]"
           >
             <button
-              className="group h-full w-full max-w-80 rounded border"
+              className="group flex h-full w-full max-w-80 flex-col items-center rounded border"
               onClick={() => onSubmit(candidate)}
               disabled={isLoading}
             >
@@ -72,11 +71,11 @@ export function Vote({
                     />
                   </div>
                 ) : (
-                  <User className="block h-full max-h-full w-full max-w-full bg-muted" />
+                  <User className="block h-full w-full max-w-full bg-muted" />
                 )}
               </AspectRatio>
 
-              <p className="break-all rounded-b py-2 transition-colors group-hover:bg-muted">
+              <p className="h-full w-full break-words rounded-b p-2 transition-colors group-hover:bg-muted">
                 {candidate.name}
               </p>
             </button>
