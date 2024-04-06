@@ -38,8 +38,8 @@ export function Header({
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-40 overflow-x-clip">
-      <nav className="border-b bg-background/50 py-2.5 backdrop-blur dark:bg-background/85">
+    <header className="sticky top-0 z-40 overflow-x-clip bg-background">
+      <nav className="border-b py-2.5">
         <div className="mx-auto flex max-w-screen-xl flex-wrap items-center justify-between gap-5 px-4">
           <Link href="/" className="flex items-center">
             <Image width={32} height={32} src="/logo.png" alt="logo" />
@@ -55,8 +55,8 @@ export function Header({
                   <Link
                     href={href}
                     className={cn(
-                      "transition-colors hover:text-primary/80",
-                      href === pathname && "text-primary/90",
+                      "transition-colors hover:text-primary",
+                      href === pathname && "text-primary",
                     )}
                     onClick={() => setIsMenuOpen(false)}
                   >

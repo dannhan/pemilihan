@@ -12,7 +12,7 @@ export function ModeSwitcher() {
 
   return (
     <div className="flex items-center">
-      <Sun className="mr-2 hidden h-[1.2rem] w-[1.2rem] text-foreground/80 transition-colors dark:text-foreground/40 md:inline" />
+      <Sun className="mr-2 hidden h-[1.2rem] w-[1.2rem] text-foreground/80 transition-colors dark:text-foreground/40 sm:inline md:hidden lg:inline" />
       <label className="inline-flex cursor-pointer items-center">
         <input
           type="checkbox"
@@ -31,7 +31,7 @@ export function ModeSwitcher() {
           )}
         ></div>
       </label>
-      <Moon className="ml-2 hidden h-[1.2rem] w-[1.2rem] text-foreground/40 transition-colors dark:text-foreground/80 md:inline" />
+      <Moon className="ml-2 hidden h-[1.2rem] w-[1.2rem] text-foreground/40 transition-colors dark:text-foreground/80 sm:inline md:hidden lg:inline" />
     </div>
   );
 }
