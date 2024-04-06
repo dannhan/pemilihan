@@ -20,7 +20,7 @@ export default async function Page() {
 
   return (
     <main className="mx-auto min-h-screen max-w-screen-xl p-4">
-      <div className="mb-4 flex flex-row items-end justify-between gap-3 border-b pb-4">
+      <div className="mb-4 flex flex-col gap-3 border-b pb-4 sm:flex-row sm:items-end sm:justify-between">
         <h1 className="text-xl font-medium text-foreground/80">Dashboard</h1>
         <Button className="max-w-fit rounded-sm px-3 py-1.5 text-sm" asChild>
           <Link href="/create-polling">
@@ -34,7 +34,7 @@ export default async function Page() {
         {data.map((vote) => (
           <li
             key={vote.id}
-            className="flex items-center justify-between gap-4 rounded-lg border bg-card px-3 py-2 shadow-md"
+            className="flex flex-col justify-between gap-4 rounded-lg border bg-card px-3 py-2 shadow-md sm:flex-row sm:items-center"
           >
             <Link
               href={`/voting/${vote.id}`}
