@@ -76,7 +76,7 @@ export function Vote({
                 )}
               </AspectRatio>
 
-              <p className="rounded-b py-2 transition-colors group-hover:bg-muted">
+              <p className="break-all rounded-b py-2 transition-colors group-hover:bg-muted">
                 {candidate.name}
               </p>
             </button>
