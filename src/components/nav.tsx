@@ -14,8 +14,10 @@ export function Nav({ session }: { session: Session | null }) {
   const links = [
     { href: "/", label: "Beranda" },
     { href: "/create-polling", label: "Buat Polling" },
-    // { href: "/tentang-kami", label: "Tentang Kami" },
+    { href: "/about-us", label: "Tentang Kami" },
   ];
+
+  session && links.push({ href: "/dashboard", label: "Dashboard" });
 
   const props = { links, session, isMenuOpen, setIsMenuOpen, redirect };
 

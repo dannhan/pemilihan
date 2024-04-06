@@ -20,6 +20,21 @@ export async function getPublicPollsAdmin() {
   return data;
 }
 
+export async function getUserPollsAdmin(userId: string) {
+  const collectionRef = firebaseAdminFirestore.collection(colName);
+  const snapshot = await collectionRef
+    .select("title", "date_created", "private")
+    .where("userId", "==", userId)
+    .orderBy("date_created", "desc")
+    .get();
+
+  const data: Poll[] = [];
+  snapshot.forEach((doc) => data.push({ id: doc.id, ...doc.data() } as Poll));
+
+  console.log("USER POLLS RETRIEVED...");
+  return data;
+}
+
 export async function getPollByIdAdmin(id: string) {
   const pollRef = firebaseAdminFirestore.collection(colName).doc(id);
   const poll = (await pollRef.get()).data() as Poll;

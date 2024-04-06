@@ -1,5 +1,5 @@
 import { getToken } from "next-auth/jwt";
-import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export default async function middleware(req: NextRequest) {
   const token = await getToken({ req });
@@ -15,8 +15,12 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/", req.url));
     }
   }
+
+  if (req.nextUrl.pathname.startsWith("/dashboard") && !isAuthenticated) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
 }
 
 export const config = {
-  matcher: ["/login"],
+  matcher: ["/login", "/dashboard"],
 };
