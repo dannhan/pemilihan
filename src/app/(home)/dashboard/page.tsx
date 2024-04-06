@@ -7,16 +7,12 @@ import { Plus } from "lucide-react";
 
 export default async function Page() {
   const session = await getAuth();
-
   if (!session) return null;
 
-  const data = await getUserPollsAdmin(session!.user.id);
+  const data = await getUserPollsAdmin(session.user.id);
 
-  const dateFormat = (date: Date) => {
-    return new Intl.DateTimeFormat("id-ID", {
-      dateStyle: "full",
-    }).format(date);
-  };
+  const dateFormat = (date: Date) =>
+    new Intl.DateTimeFormat("id-ID", { dateStyle: "full" }).format(date);
 
   return (
     <main className="mx-auto min-h-screen max-w-screen-xl p-4">
