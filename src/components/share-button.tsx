@@ -92,7 +92,7 @@ Tolong forward ke gorup dan teman-temanmu ya. Terima kasih
             </div>
 
             <p className="text-sm">Or copy link</p>
-            <div className="mt-4 flex items-center justify-between border-2 border-gray-200 py-2">
+            <div className="mt-4 flex items-center justify-between border-2 border-input py-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -105,7 +105,7 @@ Tolong forward ke gorup dan teman-temanmu ya. Terima kasih
               </svg>
 
               <input
-                className="w-full bg-transparent outline-none"
+                className="w-full bg-transparent outline-none mx-2"
                 type="text"
                 placeholder="link"
                 value={fullPath}
