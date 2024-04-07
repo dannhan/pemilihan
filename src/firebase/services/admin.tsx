@@ -62,6 +62,7 @@ export async function getPollByIdAdmin(id: string) {
 
 export async function getResultByIdAdmin(id: string) {
   const pollRef = firebaseAdminFirestore.collection(colName).doc(id);
+  const poll = (await pollRef.get()).data() as Poll;
 
   // Batched read operation to fetch both options and votes collections
   const snapshot = await firebaseAdminFirestore.runTransaction(
@@ -87,7 +88,7 @@ export async function getResultByIdAdmin(id: string) {
   const votes: Vote[] = [];
   snapshot.votesSnapshot.forEach((doc) => votes.push(doc.data() as Vote));
 
-  return { options, votes };
+  return { poll, options, votes };
 }
 
 // todo

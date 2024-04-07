@@ -10,6 +10,8 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   if (options.length === 0) return notFound();
 
+  const fullPath = `https://pemilihan-omega.vercel.app/voting/${params?.id}`;
+
   return (
     <main className="mx-auto min-h-screen max-w-[40rem] items-center px-4">
       <h1 className="my-6 text-center text-2xl font-bold leading-none">
@@ -25,7 +27,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       <div className="my-4 flex w-full flex-col justify-center">
         <div className="mx-auto flex w-full max-w-80 flex-col gap-2 sm:max-w-none">
           <SeeResultButton params={params} />
-          <ShareButton options={options} title={poll?.title} />
+          <ShareButton options={options} title={poll?.title} fullPath={fullPath}/>
         </div>
       </div>
     </main>

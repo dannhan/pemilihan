@@ -24,16 +24,12 @@ import { Option } from "@/lib/type";
 export function ShareButton({
   options,
   title,
+  fullPath,
 }: {
-  options: Option[];
+  options: Omit<Option, "id" | "image">[];
   title: string;
+  fullPath: string;
 }) {
-  let fullPath = "";
-
-  if (typeof window !== "undefined") {
-    fullPath = `${window.location.href}`;
-  }
-
   const text = `${title}
 
 ${options.map((option) => `- ${option.name}`).join("\n")}

@@ -1,11 +1,19 @@
+import Link from "next/link";
+
 import { getResultByIdAdmin } from "@/firebase/services/admin";
 
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
 import { Chart } from "@/components/chart";
+import { ShareButton } from "@/components/share-button";
+import { RefreshButton } from "@/components/refresh-button";
+import { ArrowLeft } from "lucide-react";
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const { options, votes } = await getResultByIdAdmin(params.id);
+  const fullPath = `https://pemilihan-omega.vercel.app/voting/${params?.id}`;
+
+  const { poll, options, votes } = await getResultByIdAdmin(params.id);
 
   const counts = new Map();
   const totalCount = votes.length;
@@ -65,6 +73,20 @@ export default async function Page({ params }: { params: { id: string } }) {
           ))}
 
           <li className="block text-xl">Total: {totalCount} suara</li>
+          <li className="flex flex-col flex-nowrap gap-4 overflow-hidden md:flex-row">
+            <RefreshButton />
+            <Button asChild>
+              <Link href="./">
+                <ArrowLeft className="mr-3 h-4 w-4" />
+                Kembali ke polling
+              </Link>
+            </Button>
+            <ShareButton
+              options={options}
+              title={poll?.title}
+              fullPath={fullPath}
+            />
+          </li>
         </ul>
       </section>
     </main>
