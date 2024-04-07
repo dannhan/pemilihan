@@ -1,10 +1,9 @@
 import { notFound } from "next/navigation";
 
-import { Share2, User } from "lucide-react";
 import { getPollByIdAdmin } from "@/firebase/services/admin";
-import { SeeResultButton } from "@/components/see-result-button";
-import { Button } from "@/components/ui/button";
 import { Vote } from "@/components/vote";
+import { SeeResultButton } from "@/components/see-result-button";
+import { ShareButton } from "@/components/share-button";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const { poll, options } = await getPollByIdAdmin(params.id);
@@ -26,10 +25,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       <div className="my-4 flex w-full flex-col justify-center">
         <div className="mx-auto flex w-full max-w-80 flex-col gap-2 sm:max-w-none">
           <SeeResultButton params={params} />
-          <Button variant="secondary" className="border hidden">
-            <Share2 className="mr-3 h-4 w-4" />
-            Bagikan Poling
-          </Button>
+          <ShareButton options={options} title={poll?.title} />
         </div>
       </div>
     </main>
