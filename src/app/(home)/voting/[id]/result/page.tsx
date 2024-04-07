@@ -1,11 +1,11 @@
-import { getResultById } from "@/firebase/services/admin";
+import { getResultByIdAdmin } from "@/firebase/services/admin";
 
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Chart } from "./chart";
+import { Chart } from "@/components/chart";
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const { options, votes } = await getResultById(params.id);
+  const { options, votes } = await getResultByIdAdmin(params.id);
 
   const counts = new Map();
   const totalCount = votes.length;
