@@ -21,3 +21,5 @@ export const firebaseAdminFirestore = initFirestore({
   }),
 });
 export const firebaseAdminAuth = admin.auth(app);
+export const firebaseAdminBucket = admin.storage().bucket("gs://pemilihan-omega.appspot.com");
+

@@ -1,7 +1,13 @@
 import { z } from "zod";
 
 import { createPollFormSchema as formSchema } from "@/lib/schema";
-import { addDoc, collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { firebaseAuth, firebaseFirestore } from "@/firebase/firebase";
 import { User } from "firebase/auth";
@@ -36,7 +42,7 @@ export async function postPollClient(values: z.infer<typeof formSchema>) {
       if (option.image) {
         const storageRef = ref(
           storage,
-          `images/${colName}/options/${pollId}/${option.image.name}-${idx}`,
+          `images/${colName}/options/${pollId}/${idx}-${option.image.name}`,
         );
         const metadata = { contentType: "image/jpeg" };
 
@@ -54,11 +60,22 @@ export async function postPollClient(values: z.infer<typeof formSchema>) {
   }
 }
 
-export async function postVoteClient(pollId: string, option: string, user: User) {
+export async function postVoteClient(
+  pollId: string,
+  option: string,
+  user: User,
+) {
   const colName = process.env.NODE_ENV !== "production" ? "tests" : "polls";
-  await setDoc(doc(firebaseFirestore, `${colName}/${pollId}/votes`, `${user.uid}_${pollId}`), {
-    option,
-  }).catch((error) => {
+  await setDoc(
+    doc(
+      firebaseFirestore,
+      `${colName}/${pollId}/votes`,
+      `${user.uid}_${pollId}`,
+    ),
+    {
+      option,
+    },
+  ).catch((error) => {
     throw error;
   });
 }

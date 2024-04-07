@@ -4,6 +4,7 @@ import { getAuth } from "@/lib/auth";
 
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { DeletePollForm } from "./delete-poll-form";
 
 export default async function Page() {
   const session = await getAuth();
@@ -42,13 +43,8 @@ export default async function Page() {
               </p>
             </Link>
 
-            <Button
-              variant="destructive"
-              size="sm"
-              className="border-2 border-destructive bg-transparent text-destructive hover:bg-destructive hover:text-destructive-foreground"
-            >
-              Hapus
-            </Button>
+
+            <DeletePollForm pollId={vote.id} />
           </li>
         ))}
       </ul>

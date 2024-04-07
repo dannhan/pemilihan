@@ -1,6 +1,9 @@
 import "server-only";
 
-import { firebaseAdminFirestore } from "@/firebase/firebaseAdmin";
+import {
+  firebaseAdminBucket,
+  firebaseAdminFirestore,
+} from "@/firebase/firebaseAdmin";
 import type { Poll, Option, Vote } from "@/lib/type";
 
 const colName = process.env.NODE_ENV !== "production" ? "tests" : "polls";
@@ -57,28 +60,95 @@ export async function getPollByIdAdmin(id: string) {
   return { poll, options };
 }
 
-export async function getResultById(id: string) {
+export async function getResultByIdAdmin(id: string) {
   const pollRef = firebaseAdminFirestore.collection(colName).doc(id);
 
   // Batched read operation to fetch both options and votes collections
-  const snapshot = await firebaseAdminFirestore.runTransaction(async (transaction) => {
-    // todo i am not sure if it use promise all
-    const [optionsSnapshot, votesSnapshot] = await Promise.all([
-      transaction.get(pollRef.collection("options").select("name")),
-      transaction.get(pollRef.collection("votes")),
-    ]);
+  const snapshot = await firebaseAdminFirestore.runTransaction(
+    async (transaction) => {
+      // todo i am not sure if it use promise all
+      const [optionsSnapshot, votesSnapshot] = await Promise.all([
+        transaction.get(pollRef.collection("options").select("name")),
+        transaction.get(pollRef.collection("votes")),
+      ]);
 
-    console.log("POLL RESULT RETRIEVED...");
-    return { optionsSnapshot, votesSnapshot };
-  });
+      console.log("POLL RESULT RETRIEVED...");
+      return { optionsSnapshot, votesSnapshot };
+    },
+  );
 
   // Process options
   const options: Omit<Option, "id" | "image">[] = [];
-  snapshot.optionsSnapshot.forEach((doc) => options.push({ ...doc.data() } as Option));
+  snapshot.optionsSnapshot.forEach((doc) =>
+    options.push({ ...doc.data() } as Option),
+  );
 
   // Process votes
   const votes: Vote[] = [];
   snapshot.votesSnapshot.forEach((doc) => votes.push(doc.data() as Vote));
 
   return { options, votes };
+}
+
+// todo
+// this is very expensive operation
+export async function deletePollByIdAdmin(pollId: string) {
+  const pollRef = firebaseAdminFirestore.collection(colName).doc(pollId);
+  const optionsQuery = pollRef.collection("options");
+  const votesQuery = pollRef.collection("votes");
+
+  try {
+    // delete image folder document
+    const folderPath = `images/${colName}/options/${pollId}`;
+    await deleteStorageFolder(folderPath);
+
+    // // delete poll document
+    await pollRef.delete();
+    
+    // // Delete options and votes collections
+    await deleteQueryBatch(optionsQuery);
+    await deleteQueryBatch(votesQuery);
+
+    return true; // Return true if deletion is successful
+  } catch (error) {
+    console.error("Error deleting poll:", error);
+    return false; // Return false if deletion fails
+  }
+
+  // prettier-ignore
+  async function deleteQueryBatch(query: FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData, FirebaseFirestore.DocumentData>) {
+    const batchSize = 500; // Batch size for efficient deletion
+
+    while (true) {
+      const snapshot = await query.limit(batchSize).get();
+
+      if (snapshot.size === 0) {
+        // No more documents to delete
+        return;
+      }
+
+      // Delete documents in a batch
+      const batch = firebaseAdminFirestore.batch();
+      snapshot.docs.forEach(doc => {
+        batch.delete(doc.ref);
+      });
+
+      await batch.commit();
+    }
+  }
+
+  async function deleteStorageFolder(folderPath: string) {
+    // Delete files in the folder
+    await deleteFilesInFolder(folderPath);
+
+    // Delete folder reference
+    await firebaseAdminBucket.deleteFiles({ prefix: folderPath });
+  }
+
+  async function deleteFilesInFolder(folderPath: string) {
+    const [files] = await firebaseAdminBucket.getFiles({ prefix: folderPath });
+    const deletePromises = files.map((file) => file.delete());
+
+    await Promise.all(deletePromises);
+  }
 }
