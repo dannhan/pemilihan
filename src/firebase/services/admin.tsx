@@ -63,7 +63,7 @@ export async function getPollByIdAdmin(id: string) {
 export async function getPollBySlugAdmin(slug: string) {
   const pollCollectionRef = firebaseAdminFirestore.collection(colName);
   const pollSnapshot = await pollCollectionRef
-    .select("title", "date_created", "private")
+    .select("title", "date_created", "private", "userId")
     .where("slug", "==", slug)
     .orderBy("date_created", "desc")
     .get();
@@ -134,7 +134,7 @@ export async function getResultBySlugAdmin(slug: string) {
   // fetch poll by slug and get it id
   const pollCollectionRef = firebaseAdminFirestore.collection(colName);
   const pollSnapshot = await pollCollectionRef
-    .select("title", "date_created", "private")
+    .select("title", "date_created", "private", "userId")
     .where("slug", "==", slug)
     .orderBy("date_created", "desc")
     .get();

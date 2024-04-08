@@ -13,7 +13,8 @@ const plus_Jakarta_Sans = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Check Polling",
-  description: "Polling Generator",
+  description:
+    "Tertarik untuk mengadakan jajak pendapat atau membuat survei online di WhatsApp, Facebook, dan Twitter? Cara-caranya sangat mudah dan gratis",
 };
 
 export default function RootLayout({

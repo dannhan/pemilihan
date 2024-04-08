@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { getResultBySlugAdmin } from "@/firebase/services/admin";
 
+import { getAuth } from "@/lib/auth";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
   const { poll, options, votes } = await getResultBySlugAdmin(params.slug);
 
   if (poll === null) return notFound();
+
+  const session = await getAuth();
+  if (session?.user.id !== poll.userId) return null;
 
   const counts = new Map();
   const totalCount = votes.length;

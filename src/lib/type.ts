@@ -7,6 +7,7 @@ export type Poll = {
   private: boolean;
   multiple: boolean;
   comment: boolean;
+  userId: string;
   slug: string;
 };
 
