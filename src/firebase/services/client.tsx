@@ -14,6 +14,10 @@ import { User } from "firebase/auth";
 
 const colName = process.env.NODE_ENV !== "production" ? "tests" : "polls";
 
+function getRndInteger(min: number, max:number) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
 // create new poll from client side
 export async function postPollClient(values: z.infer<typeof formSchema>) {
   const user = firebaseAuth.currentUser;
@@ -24,6 +28,8 @@ export async function postPollClient(values: z.infer<typeof formSchema>) {
   }
 
   try {
+    const slug = `${getRndInteger(1111,9999)}${values.title.split(" ").join("-").toLowerCase()}`;
+
     const storage = getStorage();
     const pollRef = await addDoc(collection(firebaseFirestore, colName), {
       title: values.title,
@@ -32,6 +38,7 @@ export async function postPollClient(values: z.infer<typeof formSchema>) {
       comment: values.comment,
       date_created: serverTimestamp(),
       userId: user?.uid,
+      slug,
     });
     const pollId = pollRef.id;
 

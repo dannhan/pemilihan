@@ -2,18 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Input } from "./ui/input";
+import { Poll } from "@/lib/type";
 import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 export function PollList({
   polls,
 }: {
-  polls: {
-    id: string;
-    title: string;
-    private: boolean;
-    date_created: string;
-  }[];
+  polls: (Omit<Poll, "date_created"> & { date_created: string })[];
 }) {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -29,7 +25,7 @@ export function PollList({
         </label>
         <div className="relative">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-            <Search className="h-5 w-8 pr-3 text-muted-foreground border-r" />
+            <Search className="h-5 w-8 border-r pr-3 text-muted-foreground" />
           </div>
           <Input
             value={searchTerm}
@@ -46,7 +42,7 @@ export function PollList({
       <ul className="space-y-2 md:space-y-3">
         {searchResults.map((vote) => (
           <li key={vote.id} className="rounded-md border bg-card p-4 shadow-md">
-            <Link href={`/voting/${vote.id}`} className="cursor-pointer">
+            <Link href={`/${vote.slug ? "polling" : "voting"}/${vote.slug || vote.id}`} className="cursor-pointer">
               <h1 className="font-bold sm:text-lg md:text-xl">{vote.title}</h1>
               <p className="pt-2 text-xs text-gray-500 sm:text-sm">
                 Dibuat: {vote.date_created}

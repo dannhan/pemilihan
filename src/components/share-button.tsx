@@ -37,7 +37,7 @@ ${options.map((option) => `- ${option.name}`).join("\n")}
 Berikan suara anda, klik link
 ${fullPath}
 
-Tolong forward ke gorup dan teman-temanmu ya. Terima kasih
+Ayo, mari kita bagikan ke grup dan teman-teman kita ya.Terima kasih atas partisipasinya!
 `;
 
   return (
