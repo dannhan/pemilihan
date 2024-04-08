@@ -10,7 +10,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   if (options.length === 0) return notFound();
 
-  const fullPath = `https://checkpolling.id/${params?.id}`;
+  const fullPath = `https://checkpolling.id/voting/${params?.id}`;
 
   return (
     <main className="mx-auto min-h-screen max-w-[40rem] items-center px-4">
