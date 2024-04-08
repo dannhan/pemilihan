@@ -14,7 +14,7 @@ export function PollList({
   const [searchTerm, setSearchTerm] = useState("");
 
   const searchResults = polls.filter((product) =>
-    product.title.includes(searchTerm),
+    product.title.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
