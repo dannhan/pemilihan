@@ -42,7 +42,7 @@ export function PollList({
       <ul className="space-y-2 md:space-y-3">
         {searchResults.map((vote) => (
           <li key={vote.id} className="rounded-md border bg-card p-4 shadow-md">
-            <Link href={`/${vote.slug ? "polling" : "voting"}/${vote.slug || vote.id}`} className="cursor-pointer">
+            <Link href={`/polling/${vote.slug}`} className="cursor-pointer">
               <h1 className="font-bold sm:text-lg md:text-xl">{vote.title}</h1>
               <p className="pt-2 text-xs text-gray-500 sm:text-sm">
                 Dibuat: {vote.date_created}

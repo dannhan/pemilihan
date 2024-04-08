@@ -23,8 +23,6 @@ export async function generateMetadata({
 export default async function Page({ params }: { params: { slug: string } }) {
   const { poll, options } = await getPollBySlugAdmin(params.slug);
 
-  const sluggedParams = { id: params.slug };
-
   if (poll === null) return notFound();
 
   const fullPath = `https://checkpolling.id/polling/${params?.slug}`;
@@ -37,7 +35,8 @@ export default async function Page({ params }: { params: { slug: string } }) {
       </h1>
 
       <Vote
-        params={sluggedParams}
+        id={poll.id}
+        params={params}
         candidates={options || []}
         className="rounded-md sm:border sm:p-4 sm:shadow-md"
       />
@@ -45,7 +44,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       <div className="my-4 flex w-full flex-col justify-center">
         <div className="mx-auto flex w-full max-w-80 flex-col gap-2 sm:max-w-none">
           {session?.user.id === poll.userId ? (
-            <SeeResultButton params={sluggedParams} />
+            <SeeResultButton params={params} />
           ) : (
             ""
           )}

@@ -34,7 +34,7 @@ export default async function Page() {
             className="flex flex-col justify-between gap-4 rounded-lg border bg-card px-3 py-2 shadow-md sm:flex-row sm:items-center"
           >
             <Link
-              href={`/voting/${vote.id}`}
+              href={`/polling/${vote.slug}`}
               className="grow cursor-pointer focus:outline-1"
             >
               <h1 className="font-medium">{vote.title}</h1>

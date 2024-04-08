@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 
 import { Option } from "@/lib/type";
 
-import { User } from "lucide-react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Thanks } from "@/components/thanks";
 
@@ -14,11 +13,13 @@ import { firebaseAuth } from "@/firebase/firebase";
 import { postVoteClient } from "@/firebase/services/client";
 
 export function Vote({
+  id,
   params,
   candidates,
   className,
 }: {
-  params: { id: string };
+  id: string;
+  params: { slug: string };
   candidates: Option[];
   className?: string;
 }) {
@@ -30,7 +31,7 @@ export function Vote({
     setIsLoading(true);
     const user = firebaseAuth.currentUser;
     if (!user) {
-      const redirect = encodeURIComponent(`/voting/${params.id}`);
+      const redirect = encodeURIComponent(`/polling/${params.slug}`);
 
       alert("Anda harus login terlebih dahulu!");
       router.push(`/login?redirect=${redirect}`);
@@ -38,7 +39,7 @@ export function Vote({
       return;
     }
 
-    await postVoteClient(params.id, candidate.name, user);
+    await postVoteClient(id, candidate.name, user);
     setIsLoading(false);
 
     setSelected(true);

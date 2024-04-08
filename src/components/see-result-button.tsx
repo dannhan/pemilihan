@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { PieChart } from "lucide-react";
 
-type Props = { params: { id: string }; className?: string };
+type Props = { params: { slug: string }; className?: string };
 export function SeeResultButton({ params, className }: Props) {
   const router = useRouter();
 
@@ -12,7 +12,7 @@ export function SeeResultButton({ params, className }: Props) {
     <Button
       // todo: better way?
       onClick={() => {
-        router.push(`${params.id}/result`);
+        router.push(`${params.slug}/result`);
         router.refresh();
       }}
       className={className}

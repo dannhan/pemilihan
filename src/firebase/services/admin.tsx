@@ -176,6 +176,12 @@ export async function getResultBySlugAdmin(slug: string) {
   const votes: Vote[] = [];
   snapshot.votesSnapshot.forEach((doc) => votes.push(doc.data() as Vote));
 
+  console.log({
+    poll,
+    options,
+    votes,
+  });
+
   return { poll, options, votes };
 }
 
