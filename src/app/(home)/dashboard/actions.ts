@@ -5,7 +5,6 @@ import { revalidatePath } from "next/cache";
 
 export async function deletePoll(formData: FormData) {
   const pollId = formData.get("pollId");
-  console.log({ pollId });
 
   if (typeof pollId !== "string") {
     return;

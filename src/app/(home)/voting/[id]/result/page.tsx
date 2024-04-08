@@ -11,7 +11,7 @@ import { RefreshButton } from "@/components/refresh-button";
 import { ArrowLeft } from "lucide-react";
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const fullPath = `https://pemilihan-omega.vercel.app/voting/${params?.id}`;
+  const fullPath = `https://checkpolling.id/${params?.id}`;
 
   const { poll, options, votes } = await getResultByIdAdmin(params.id);
 

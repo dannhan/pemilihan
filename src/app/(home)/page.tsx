@@ -9,8 +9,6 @@ export default async function Page() {
       datum.date_created.seconds * 1000,
     ).toLocaleDateString("en-GB"),
   }));
-  console.log({ formattedData });
-
 
   return (
     <main className="mx-auto min-h-screen max-w-screen-xl p-4">
