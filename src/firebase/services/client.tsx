@@ -28,7 +28,9 @@ export async function postPollClient(values: z.infer<typeof formSchema>) {
   }
 
   try {
-    const slug = `${getRndInteger(1111,9999)}${values.title.split(" ").join("-").toLowerCase()}`;
+    const title = values.title.split(" ").join("-").toLowerCase();
+    const encodedTitle = encodeURIComponent(title);
+    const slug = `${getRndInteger(1111,9999)}${encodedTitle}`;
 
     const storage = getStorage();
     const pollRef = await addDoc(collection(firebaseFirestore, colName), {
