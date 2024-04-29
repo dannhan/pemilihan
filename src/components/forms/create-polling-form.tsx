@@ -101,12 +101,12 @@ export function CreatePollingForm() {
           <SettingFormField form={form} name="private">
             Private (hanya melalui link langsung)
           </SettingFormField>
-          <SettingFormField form={form} name="multiple">
-            Bisa memilih lebih dari 1 pilihan
-          </SettingFormField>
-          <SettingFormField form={form} name="comment">
-            Tidak bisa memberi komentar
-          </SettingFormField>
+          {/* <SettingFormField form={form} name="multiple"> */}
+          {/*   Bisa memilih lebih dari 1 pilihan */}
+          {/* </SettingFormField> */}
+          {/* <SettingFormField form={form} name="comment"> */}
+          {/*   Tidak bisa memberi komentar */}
+          {/* </SettingFormField> */}
         </div>
 
         <Button type="submit" disabled={isLoading}>

@@ -17,6 +17,7 @@ export function Nav({ session }: { session: Session | null }) {
     { href: "/about-us", label: "Tentang Kami" },
   ];
 
+  // TODO: why links on client side?
   session && links.push({ href: "/dashboard", label: "Dashboard" });
 
   const props = { links, session, isMenuOpen, setIsMenuOpen, redirect };

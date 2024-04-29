@@ -26,7 +26,7 @@ export async function getPublicPollsAdmin() {
 export async function getUserPollsAdmin(userId: string) {
   const collectionRef = firebaseAdminFirestore.collection(colName);
   const snapshot = await collectionRef
-    .select("title", "date_created", "private")
+    .select("title", "date_created", "private", "slug")
     .where("userId", "==", userId)
     .orderBy("date_created", "desc")
     .get();

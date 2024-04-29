@@ -14,23 +14,25 @@ import { User } from "firebase/auth";
 
 const colName = process.env.NODE_ENV !== "production" ? "tests" : "polls";
 
-function getRndInteger(min: number, max:number) {
+function getRndInteger(min: number, max: number) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
 // create new poll from client side
 export async function postPollClient(values: z.infer<typeof formSchema>) {
+  /* legacy */
   const user = firebaseAuth.currentUser;
 
   if (!user) {
     alert("Anda harus login untuk membuat poll!");
-    return;
+    throw new Error("Auth error");
   }
+  /* legacy */
 
   try {
     const title = values.title.split(" ").join("-").toLowerCase();
     const encodedTitle = encodeURIComponent(title);
-    const slug = `${getRndInteger(1111,9999)}${encodedTitle}`;
+    const slug = `${getRndInteger(1111, 9999)}${encodedTitle}`;
 
     const storage = getStorage();
     const pollRef = await addDoc(collection(firebaseFirestore, colName), {
@@ -39,7 +41,7 @@ export async function postPollClient(values: z.infer<typeof formSchema>) {
       multiple: values.multiple,
       comment: values.comment,
       date_created: serverTimestamp(),
-      userId: user?.uid,
+      userId: user?.uid || "admin",
       slug,
     });
     const pollId = pollRef.id;
