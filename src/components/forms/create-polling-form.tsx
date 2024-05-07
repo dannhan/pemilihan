@@ -17,6 +17,17 @@ import { createPollFormSchema as formSchema } from "@/lib/schema";
 import { cn } from "@/lib/utils";
 import { LoaderCircle, Plus, X } from "lucide-react";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   Form,
   FormControl,
   FormDescription,
@@ -101,13 +112,31 @@ export function CreatePollingForm() {
           <SettingFormField form={form} name="private">
             Private (hanya melalui link langsung)
           </SettingFormField>
-          {/* <SettingFormField form={form} name="multiple"> */}
-          {/*   Bisa memilih lebih dari 1 pilihan */}
-          {/* </SettingFormField> */}
-          {/* <SettingFormField form={form} name="comment"> */}
-          {/*   Tidak bisa memberi komentar */}
-          {/* </SettingFormField> */}
+          {/* <SettingFormField form={form} name="multiple">
+            Bisa memilih lebih dari 1 pilihan
+          </SettingFormField>
+          <SettingFormField form={form} name="comment">
+            Tidak bisa memberi komentar
+          </SettingFormField> */}
         </div>
+
+        {/* Password Pop up */}
+        {/* <AlertDialog>
+          <AlertDialogTrigger className="">
+            <Button type="button">Buat Polling</Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Admin Password</AlertDialogTitle>
+              <AlertDialogDescription>Masukkan kata sandi admin untuk membuat pollling</AlertDialogDescription>
+            </AlertDialogHeader>
+            <Input />
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction>Continue</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog> */}
 
         <Button type="submit" disabled={isLoading}>
           {isLoading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}

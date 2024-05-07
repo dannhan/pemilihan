@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 
 import { TopLoader } from "@/components/top-loader";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
+import { Footer } from "@/components/footer";
 
 const plus_Jakarta_Sans = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -34,6 +35,7 @@ export default function RootLayout({
             >
               <TopLoader />
               {children}
+              <Footer />
               <TailwindIndicator />
             </ThemeProvider>
           </FirebaseAuthProvider>
