@@ -6,7 +6,7 @@ export default async function Page() {
   if (process.env.NODE_ENV === "production" || !session) return <h1>Hello World!</h1>;
 
   const userId = session.user.id;
-  // firebaseAdminAuth.setCustomUserClaims(userId, { admin: true });
+  firebaseAdminAuth.setCustomUserClaims(userId, { admin: true });
   const userRecord = await firebaseAdminAuth.getUser(userId);
   console.log(userRecord.customClaims?.admin);
 
