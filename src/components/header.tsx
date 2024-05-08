@@ -6,7 +6,7 @@ import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
 
 import { cn } from "@/lib/utils";
-import { Menu } from "lucide-react";
+import { Menu, UserIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -76,7 +76,9 @@ export function Header({
                       src={session.user?.image || ""}
                       alt="@shadcn"
                     />
-                    <AvatarFallback></AvatarFallback>
+                    <AvatarFallback>
+                      <UserIcon className="h-5 w-5" />
+                    </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
 

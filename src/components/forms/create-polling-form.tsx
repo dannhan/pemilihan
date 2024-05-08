@@ -112,17 +112,11 @@ export function CreatePollingForm() {
           <SettingFormField form={form} name="private">
             Private (hanya melalui link langsung)
           </SettingFormField>
-          {/* <SettingFormField form={form} name="multiple">
-            Bisa memilih lebih dari 1 pilihan
-          </SettingFormField>
-          <SettingFormField form={form} name="comment">
-            Tidak bisa memberi komentar
-          </SettingFormField> */}
         </div>
 
         {/* Password Pop up */}
-        {/* <AlertDialog>
-          <AlertDialogTrigger className="">
+        <AlertDialog>
+          <AlertDialogTrigger className="hidden" asChild>
             <Button type="button">Buat Polling</Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
@@ -131,12 +125,12 @@ export function CreatePollingForm() {
               <AlertDialogDescription>Masukkan kata sandi admin untuk membuat pollling</AlertDialogDescription>
             </AlertDialogHeader>
             <Input />
-            <AlertDialogFooter>
+            <AlertDialogFooter className="flex">
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction>Continue</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
-        </AlertDialog> */}
+        </AlertDialog>
 
         <Button type="submit" disabled={isLoading}>
           {isLoading && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}

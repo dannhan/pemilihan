@@ -1,6 +1,6 @@
 "use server";
 
-import { deletePollByIdAdmin } from "@/firebase/services/admin";
+import { deletePollByIdServer } from "@/firebase/services/server";
 import { revalidatePath } from "next/cache";
 
 export async function deletePoll(formData: FormData) {
@@ -10,6 +10,6 @@ export async function deletePoll(formData: FormData) {
     return;
   }
 
-  await deletePollByIdAdmin(pollId);
+  await deletePollByIdServer(pollId);
   revalidatePath("/dashboard");
 }

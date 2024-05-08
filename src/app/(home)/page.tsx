@@ -1,8 +1,8 @@
-import { getPublicPollsAdmin } from "@/firebase/services/admin";
+import { getPublicPollsServer } from "@/firebase/services/server";
 import { PollList } from "@/components/poll-list";
 
 export default async function Page() {
-  const data = await getPublicPollsAdmin();
+  const data = await getPublicPollsServer();
   const formattedData = data.map((datum) => ({
     ...datum,
     date_created: new Date(

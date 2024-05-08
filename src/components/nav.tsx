@@ -6,19 +6,16 @@ import { Session } from "next-auth";
 import { Header } from "./header";
 import { Sidebar } from "./sidebar";
 
-export function Nav({ session }: { session: Session | null }) {
+export function Nav({
+  session,
+  links,
+}: {
+  session: Session | null;
+  links: { href: string; label: string }[];
+}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const redirect = encodeURIComponent(pathname);
-
-  const links = [
-    { href: "/", label: "Beranda" },
-    { href: "/create-polling", label: "Buat Polling" },
-    { href: "/about-us", label: "Tentang Kami" },
-  ];
-
-  // TODO: why links on client side?
-  session && links.push({ href: "/dashboard", label: "Dashboard" });
 
   const props = { links, session, isMenuOpen, setIsMenuOpen, redirect };
 

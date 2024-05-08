@@ -76,7 +76,6 @@ export async function postVoteClient(
   option: string,
   user: User,
 ) {
-  const colName = process.env.NODE_ENV !== "production" ? "tests" : "polls";
   await setDoc(
     doc(
       firebaseFirestore,

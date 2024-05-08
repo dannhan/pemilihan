@@ -1,5 +1,8 @@
 import Link from "next/link";
-import { getUserPollsAdmin } from "@/firebase/services/admin";
+import { notFound } from "next/navigation";
+
+import { firebaseAdminAuth } from "@/firebase/firebaseAdmin";
+import { getPollsServer } from "@/firebase/services/server";
 import { getAuth } from "@/lib/auth";
 
 import { Button } from "@/components/ui/button";
@@ -8,9 +11,13 @@ import { DeletePollForm } from "./delete-poll-form";
 
 export default async function Page() {
   const session = await getAuth();
-  if (!session) return null;
+  if (!session) return notFound();
 
-  const data = await getUserPollsAdmin(session.user.id);
+  const userId = session.user.id;
+  const userRecord = await firebaseAdminAuth.getUser(userId);
+  if (userRecord.customClaims?.admin === false) return notFound();
+
+  const data = await getPollsServer();
 
   const dateFormat = (date: Date) =>
     new Intl.DateTimeFormat("id-ID", { dateStyle: "full" }).format(date);

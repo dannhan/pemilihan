@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
-import { getPollBySlugAdmin } from "@/firebase/services/admin";
+import { getPollBySlugServer } from "@/firebase/services/server"
+import { firebaseAdminAuth } from "@/firebase/firebaseAdmin";
 import { getAuth } from "@/lib/auth";
 import { Vote } from "@/components/vote";
 import { SeeResultButton } from "@/components/see-result-button";
@@ -11,7 +12,7 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }) {
-  const { poll } = await getPollBySlugAdmin(params.slug);
+  const { poll } = await getPollBySlugServer(params.slug);
 
   if (poll === null) return {};
 
@@ -21,12 +22,15 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  const { poll, options } = await getPollBySlugAdmin(params.slug);
+  const { poll, options } = await getPollBySlugServer(params.slug);
 
   if (poll === null) return notFound();
 
   const fullPath = `https://checkpolling.id/polling/${params?.slug}`;
   const session = await getAuth();
+
+  const userId = session?.user.id || "";
+  const userRecord = await firebaseAdminAuth.getUser(userId);
 
   return (
     <main className="mx-auto min-h-screen max-w-[40rem] items-center px-4">
@@ -43,7 +47,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
       <div className="my-4 flex w-full flex-col justify-center">
         <div className="mx-auto flex w-full max-w-80 flex-col gap-2 sm:max-w-none">
-          {session?.user.id === poll.userId ? (
+          {userRecord.customClaims?.admin ? (
             <SeeResultButton params={params} />
           ) : (
             ""

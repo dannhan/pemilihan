@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { getResultBySlugAdmin } from "@/firebase/services/admin";
+import { firebaseAdminAuth } from "@/firebase/firebaseAdmin";
+import { getResultBySlugServer } from "@/firebase/services/server";
 
 import { getAuth } from "@/lib/auth";
 import { Badge } from "@/components/ui/badge";
@@ -15,12 +16,14 @@ import { ArrowLeft } from "lucide-react";
 export default async function Page({ params }: { params: { slug: string } }) {
   const fullPath = `https://checkpolling.id/polling/${params?.slug}`;
 
-  const { poll, options, votes } = await getResultBySlugAdmin(params.slug);
+  const { poll, options, votes } = await getResultBySlugServer(params.slug);
 
   if (poll === null) return notFound();
 
   const session = await getAuth();
-  if (session?.user.id !== poll.userId) return null;
+  const userId = session?.user.id || "";
+  const userRecord = await firebaseAdminAuth.getUser(userId);
+  if (userRecord.customClaims?.admin === false) return notFound();
 
   const counts = new Map();
   const totalCount = votes.length;
