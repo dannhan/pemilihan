@@ -29,8 +29,8 @@ export default async function Page({ params }: { params: { slug: string } }) {
   const fullPath = `https://checkpolling.id/polling/${params?.slug}`;
   const session = await getAuth();
 
-  const userId = session?.user.id || "";
-  const userRecord = await firebaseAdminAuth.getUser(userId);
+  const userId = session?.user.id;
+  const userRecord = userId ? await firebaseAdminAuth.getUser(userId) : null;
 
   return (
     <main className="mx-auto min-h-screen max-w-[40rem] items-center px-4">
@@ -47,7 +47,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
       <div className="my-4 flex w-full flex-col justify-center">
         <div className="mx-auto flex w-full max-w-80 flex-col gap-2 sm:max-w-none">
-          {userRecord.customClaims?.admin ? (
+          {userRecord?.customClaims?.admin ? (
             <SeeResultButton params={params} />
           ) : (
             ""

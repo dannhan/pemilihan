@@ -21,9 +21,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
   if (poll === null) return notFound();
 
   const session = await getAuth();
-  const userId = session?.user.id || "";
-  const userRecord = await firebaseAdminAuth.getUser(userId);
-  if (userRecord.customClaims?.admin === false) return notFound();
+  const userId = session?.user.id;
+  const userRecord = userId ? await firebaseAdminAuth.getUser(userId) : null;
+  if (userRecord?.customClaims?.admin === false) return notFound();
 
   const counts = new Map();
   const totalCount = votes.length;
