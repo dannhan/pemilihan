@@ -11,7 +11,7 @@ export function Footer() {
               Check Polling
             </a>
           </span>
-          <div className="mt-4 flex sm:mt-0 sm:justify-center">
+          <div className="mt-4 flex sm:mt-0 sm:justify-center hidden">
             <a
               href="#"
               className="text-gray-500 hover:text-gray-900 dark:hover:text-white"

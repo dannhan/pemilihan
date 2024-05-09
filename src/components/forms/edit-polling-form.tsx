@@ -27,7 +27,7 @@ export function SubmitButton() {
   return (
     <Button type="submit" className="mt-8" disabled={pending}>
       {pending && <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />}
-      Buat Polling
+      Simpan Polling
     </Button>
   );
 }

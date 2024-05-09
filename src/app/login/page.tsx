@@ -77,7 +77,7 @@ function Signin() {
         <div className="space-y-2">
           <label
             htmlFor="password"
-            className="block text-sm font-medium leading-6 text-white"
+            className="block text-sm font-medium leading-6"
           >
             Password
           </label>
