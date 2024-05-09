@@ -23,6 +23,7 @@ export const authOptions: NextAuthOptions = {
         timeout: 10000,
       },
     }),
+    // Admin login
     CredentialProvider({
       name: "Credentials",
       credentials: {},
@@ -36,6 +37,7 @@ export const authOptions: NextAuthOptions = {
             if (userCredential.user) {
               return userCredential.user;
             }
+
             return null;
           })
           .catch((error) => console.log(error));
@@ -43,26 +45,24 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    // Called whenever session is checked
     session: async ({ session, token }) => {
       if (session?.user && token.sub) {
         session.user.id = token.sub;
-
-        const firebaseToken = await firebaseAdminAuth.createCustomToken(
+        session.firebaseToken = await firebaseAdminAuth.createCustomToken(
           token.sub,
         );
-        session.firebaseToken = firebaseToken;
       }
 
       return session;
     },
+    // Called whenever jwt is created
     jwt: async ({ user, token }) => {
       if (user) {
+        // If user login using password set the user properties manually
         if (!user.id) {
-          // todo: do proper typing
-          // @ts-expect-error
-          user.id = user?.uid || null;
-          // @ts-expect-error
-          token.name = user?.displayName || "";
+          user.id = user.uid || "";
+          token.name = user.displayName || "";
         }
 
         token.sub = user.id;
@@ -71,9 +71,10 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
   },
+  // debug: process.env.NODE_ENV !== "production",
+
   // @ts-expect-error
   adapter: FirestoreAdapter(firebaseAdminFirestore),
-  // debug: process.env.NODE_ENV !== "production",
 };
 
 export const getAuth = async () => await getServerSession(authOptions);
