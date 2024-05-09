@@ -53,7 +53,7 @@ export async function postPollClient(values: z.infer<typeof formSchema>) {
       if (option.image) {
         const storageRef = ref(
           storage,
-          `images/${colName}/options/${pollId}/${idx}-${option.image.name}`,
+          `images/${colName}/options/${pollId}/${idx}${option.image.name}`,
         );
         const metadata = { contentType: "image/jpeg" };
 

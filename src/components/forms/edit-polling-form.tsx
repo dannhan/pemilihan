@@ -63,7 +63,7 @@ export function EditPollingForm({ id, title, options }: Props) {
         <Label>Ketikan Pilihan Dibawah Ini</Label>
         {options.map((e, i) => {
           return (
-            <OptionInput key={e.id} index={i} textValue={e.name} disabled />
+            <OptionInput key={e.id} index={i} textValue={e.name} imageName={e.image} disabled />
           );
         })}
       </div>
@@ -124,6 +124,7 @@ function OptionInput({
   deleteIndex,
   children,
   name,
+  imageName,
 }: {
   index: number;
   textValue?: string;
@@ -131,6 +132,7 @@ function OptionInput({
   deleteIndex?: number;
   children?: React.ReactNode;
   name?: string;
+  imageName?: string;
 }) {
   return (
     // wrapper
@@ -162,9 +164,11 @@ function OptionInput({
         <Input
           id={`dropzone-file-${index}`}
           name={`${name}.image`}
-          type="file"
           accept="image/png, image/jpeg"
           disabled={disabled}
+          type={imageName ? "text" : "file"}
+          // todo: simplify this
+          value={imageName ? (extractFileNameFromURL(imageName) || undefined) : undefined}
           className={cn(
             "peer rounded-l-none rounded-tr-none border border-l-0 file:hidden",
             "focus-visible:border-primary focus-visible:outline-none focus-visible:ring-0  focus-visible:ring-offset-0",
@@ -190,4 +194,20 @@ function OptionInput({
       </div>
     </div>
   );
+}
+
+function extractFileNameFromURL(url: string) {
+  // Regular expression to extract the file name from the URL
+  const regex = /%2..*%2F(.*?)\?alt/;
+
+  // Executing the regular expression on the URL
+  const match = regex.exec(url);
+
+  // If a match is found, return the captured group (file name)
+  if (match && match.length > 1) {
+    return match[1];
+  } else {
+    // If no match is found, return null or an appropriate error message
+    return null;
+  }
 }

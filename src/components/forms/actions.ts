@@ -25,7 +25,7 @@ export async function update(
     if (newImage.size > 0) {
       const storageRef = ref(
         firebaseStorage,
-        `images/${colName}/options/${id}/${prevIndex + 1 + idx}-${newImage.name}`,
+        `images/${colName}/options/${id}/${prevIndex + 1 + idx}${newImage.name}`,
       );
       const metadata = { contentType: "image/jpeg" };
 
