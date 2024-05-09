@@ -5,9 +5,9 @@ import { firebaseAdminAuth } from "@/firebase/firebaseAdmin";
 import { getPollsServer } from "@/firebase/services/server";
 import { getAuth } from "@/lib/auth";
 
-import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { DeletePollForm } from "./delete-poll-form";
+import { Button } from "@/components/ui/button";
+import { DeletePollForm } from "@/components/forms/delete-poll-form";
 
 export default async function Page() {
   const session = await getAuth();
@@ -50,12 +50,19 @@ export default async function Page() {
               </p>
             </Link>
 
-            <Link href={`/edit/${vote.slug}`}>
-              <Button variant="outline" size="sm" type="submit">
-                Edit
-              </Button>
-            </Link>
-            <DeletePollForm pollId={vote.id} />
+            <div className="flex justify-end gap-2">
+              <Link href={`/edit/${vote.slug}`}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  type="submit"
+                  className="border-2 px-4"
+                >
+                  Edit
+                </Button>
+              </Link>
+              <DeletePollForm pollId={vote.id} />
+            </div>
           </li>
         ))}
       </ul>
