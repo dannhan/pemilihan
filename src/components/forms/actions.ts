@@ -6,6 +6,8 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { firebaseStorage } from "@/firebase/firebase";
 import { Timestamp } from "firebase-admin/firestore";
 
+const colName = process.env.NODE_ENV !== "production" ? "tests" : "polls";
+
 export async function update(
   newOptionsIndex: number[],
   prevIndex: number,
@@ -23,7 +25,7 @@ export async function update(
     if (newImage.size > 0) {
       const storageRef = ref(
         firebaseStorage,
-        `images/tests/options/${id}/${prevIndex + 1 + idx}-${newImage.name}`,
+        `images/${colName}/options/${id}/${prevIndex + 1 + idx}-${newImage.name}`,
       );
       const metadata = { contentType: "image/jpeg" };
 
@@ -32,7 +34,7 @@ export async function update(
     }
 
     await firebaseAdminFirestore
-      .collection("tests")
+      .collection(colName)
       .doc(id)
       .collection("options")
       .add({ name: name, date_created: time, image });
