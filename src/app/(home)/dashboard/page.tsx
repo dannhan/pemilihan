@@ -50,7 +50,11 @@ export default async function Page() {
               </p>
             </Link>
 
-
+            <Link href={`/edit/${vote.slug}`}>
+              <Button variant="outline" size="sm" type="submit">
+                Edit
+              </Button>
+            </Link>
             <DeletePollForm pollId={vote.id} />
           </li>
         ))}
