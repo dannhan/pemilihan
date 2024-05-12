@@ -8,7 +8,6 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 
 import { TopLoader } from "@/components/top-loader";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
-import { Footer } from "@/components/footer";
 
 const plus_Jakarta_Sans = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -18,11 +17,8 @@ export const metadata: Metadata = {
     "Tertarik untuk mengadakan jajak pendapat atau membuat survei online di WhatsApp, Facebook, dan Twitter? Cara-caranya sangat mudah dan gratis",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+type Props = Readonly<{ children: React.ReactNode }>;
+export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
       <body className={plus_Jakarta_Sans.className}>
