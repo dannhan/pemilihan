@@ -30,6 +30,11 @@ export default function RootLayout({ children }: Props) {
               enableSystem={false}
             >
               <TopLoader />
+              <p className="sr-only">
+                Check Polling. Tertarik untuk mengadakan jajak pendapat atau
+                membuat survei online di WhatsApp, Facebook, dan Twitter?
+                Cara-caranya sangat mudah dan gratis
+              </p>
               {children}
               <TailwindIndicator />
             </ThemeProvider>
