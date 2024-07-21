@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { firebaseAdminAuth } from "@/firebase/firebaseAdmin";
 import { getResultBySlugServer } from "@/firebase/services/server";
-
 import { getAuth } from "@/lib/auth";
+import { checkUserRecord } from "@/lib/server";
+
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
   const session = await getAuth();
   const userId = session?.user.id;
-  const userRecord = userId ? await firebaseAdminAuth.getUser(userId) : null;
+  const userRecord = await checkUserRecord(userId);
   if (userRecord?.customClaims?.admin === false) return notFound();
 
   const counts = new Map();

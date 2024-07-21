@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { firebaseAdminAuth } from "@/firebase/firebaseAdmin";
 import { getPollsServer } from "@/firebase/services/server";
 import { getAuth } from "@/lib/auth";
+import { checkUserRecord } from "@/lib/server";
 
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,8 +14,8 @@ export default async function Page() {
   if (!session) return notFound();
 
   const userId = session.user.id;
-  const userRecord = await firebaseAdminAuth.getUser(userId);
-  if (userRecord.customClaims?.admin === false) return notFound();
+  const userRecord = await checkUserRecord(userId);
+  if (userRecord?.customClaims?.admin === false) return notFound();
 
   const data = await getPollsServer();
 

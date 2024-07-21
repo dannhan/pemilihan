@@ -1,3 +1,5 @@
+/* only development page to create an admin user */
+
 import { firebaseAuth } from "@/firebase/firebase";
 import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 
@@ -6,13 +8,17 @@ import { firebaseAdminAuth } from "@/firebase/firebaseAdmin";
 
 export default async function Page() {
   const session = await getAuth();
+
   if (process.env.NODE_ENV === "production" || !session)
     return <h1>Hello World!</h1>;
 
+  /* set user to be an admin */
   const userId = session.user.id;
   firebaseAdminAuth.setCustomUserClaims(userId, { admin: true });
+
+  /* log userRecord */
   const userRecord = await firebaseAdminAuth.getUser(userId);
-  console.log(userRecord.customClaims?.admin);
+  console.log(userRecord);
 
   return (
     <>

@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 
 import { getPollBySlugServer } from "@/firebase/services/server"
-import { firebaseAdminAuth } from "@/firebase/firebaseAdmin";
 import { getAuth } from "@/lib/auth";
+import { checkUserRecord } from "@/lib/server";
+
 import { Vote } from "@/components/vote";
 import { SeeResultButton } from "@/components/see-result-button";
 import { ShareButton } from "@/components/share-button";
@@ -30,7 +31,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
   const session = await getAuth();
 
   const userId = session?.user.id;
-  const userRecord = userId ? await firebaseAdminAuth.getUser(userId) : null;
+  const userRecord = await checkUserRecord(userId);
 
   return (
     <main className="mx-auto min-h-screen max-w-[40rem] items-center px-4">

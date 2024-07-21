@@ -1,5 +1,6 @@
-import { firebaseAdminAuth } from "@/firebase/firebaseAdmin";
 import { getAuth } from "@/lib/auth";
+import { checkUserRecord } from "@/lib/server";
+
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 
@@ -10,24 +11,25 @@ export default async function Layout({
 }>) {
   const session = await getAuth();
 
-  const links = [
+  const navLinks = [
     { href: "/", label: "Beranda" },
     { href: "/about-us", label: "Tentang Kami" },
   ];
 
   if (session) {
     const userId = session.user.id;
-    const userRecord = await firebaseAdminAuth.getUser(userId);
+    const userRecord = await checkUserRecord(userId);
 
-    if (userRecord.customClaims?.admin) {
-      links.push({ href: "/create-polling", label: "Buat Polling" });
-      links.push({ href: "/dashboard", label: "Dashboard" });
+    /* if user is an admin add admin only links */
+    if (userRecord?.customClaims?.admin) {
+      navLinks.push({ href: "/create-polling", label: "Buat Polling" });
+      navLinks.push({ href: "/dashboard", label: "Dashboard" });
     }
   }
 
   return (
     <>
-      <Nav session={session} links={links} />
+      <Nav session={session} links={navLinks} />
       {children}
       <Footer />
     </>

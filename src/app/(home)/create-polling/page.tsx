@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { firebaseAdminAuth } from "@/firebase/firebaseAdmin";
+import { checkUserRecord } from "@/lib/server";
 import { getAuth } from "@/lib/auth";
 
 import { CreatePollingForm } from "@/components/forms/create-polling-form";
@@ -9,9 +9,14 @@ export default async function Page() {
   const session = await getAuth();
   if (!session) return notFound();
 
+  /* return not found if  user is not an admin */
+  /* todo:
+   do this in more top level
+   either using layout or middleware
+  */
   const userId = session.user.id;
-  const userRecord = await firebaseAdminAuth.getUser(userId);
-  if (userRecord.customClaims?.admin === false) return notFound();
+  const userRecord = await checkUserRecord(userId);
+  if (userRecord?.customClaims?.admin === false) return notFound();
 
   return (
     <main className="mx-auto min-h-screen max-w-screen-xl px-4">

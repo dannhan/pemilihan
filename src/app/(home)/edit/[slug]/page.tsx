@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 
-import { firebaseAdminAuth } from "@/firebase/firebaseAdmin";
 import { getPollBySlugServer } from "@/firebase/services/server";
+
 import { getAuth } from "@/lib/auth";
+import { checkUserRecord } from "@/lib/server";
 
 import { EditPollingForm } from "@/components/forms/edit-polling-form";
 
@@ -11,8 +12,8 @@ export default async function Page({ params }: { params: { slug: string } }) {
   if (!session) return notFound();
 
   const userId = session.user.id;
-  const userRecord = await firebaseAdminAuth.getUser(userId);
-  if (userRecord.customClaims?.admin === false) return notFound();
+  const userRecord = await checkUserRecord(userId);
+  if (userRecord?.customClaims?.admin === false) return notFound();
 
   const { poll, options } = await getPollBySlugServer(params.slug);
   if (poll === null) return notFound();
